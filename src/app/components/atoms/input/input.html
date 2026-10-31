@@ -1,0 +1,9 @@
+<input
+  [type]="type()"
+  [placeholder]="placeholder()"
+  [disabled]="disabled()"
+  (input)="onInput.emit($event.target.value)"
+  (blur)="onBlur.emit()"
+  (focus)="onFocus.emit()"
+  class="input [&+.placeholder]:text-muted-foreground [&:focus]:outline-none [&:focus]:ring-2 [&:focus]:ring-primary [&:disabled]:opacity-50"
+/>
