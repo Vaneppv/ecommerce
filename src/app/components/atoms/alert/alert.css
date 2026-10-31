@@ -1,0 +1,51 @@
+/* Base alert */
+.alert {
+  padding: 0.75rem 1rem;
+  margin-bottom: 1rem;
+  border-radius: 0.375rem;
+  font-size: 0.875rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Type-specific styling */
+.alert-success {
+  background-color: #d1e7dd;
+  border: 1px solid #badcdc;
+  color: #0f5132;
+}
+
+.alert-error {
+  background-color: #f8d7da;
+  border: 1px solid #f1aeb3;
+  color: #842029;
+}
+
+.alert-warning {
+  background-color: #fff3cd;
+  border: 1px solid #f5c97b;
+  color: #664224;
+}
+
+.alert-info {
+  background-color: #cfe2f3;
+  border: 1px solid #9dc3e6;
+  color: #26292e;
+}
+
+/* Close button */
+.alert-close {
+  padding: 0;
+  background: transparent;
+  border: none;
+  font-size: 1rem;
+  cursor: pointer;
+  color: #65676b;
+  opacity: 0.7;
+  margin-left: auto;
+}
+
+.alert-close:hover {
+  opacity: 1;
+}

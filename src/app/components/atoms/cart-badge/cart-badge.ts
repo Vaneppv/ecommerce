@@ -1,11 +1,12 @@
 import { Component, input, output } from '@angular/core';
+import { TablerIconComponent } from '@tabler/icons-angular';
 
 @Component({
-  imports: [],
+  standalone: true,
+  imports: [TablerIconComponent],
   selector: 'app-cart-badge',
   styleUrl: './cart-badge.css',
-  templateUrl: './cart-badge.html',
-  standalone: true,
+  templateUrl: './cart-badge.html'
 })
 export class CartBadge {
   count = input<number>(0);

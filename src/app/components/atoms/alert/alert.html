@@ -1,0 +1,27 @@
+<div
+  class="alert"
+  [class.alert-success]="type() === 'success'"
+  [class.alert-error]="type() === 'error'"
+  [class.alert-warning]="type() === 'warning'"
+  [class.alert-info]="type() === 'info'"
+  role="alert"
+>
+  <!-- Tabler icon -->
+  <tabler-icon
+    [icon]="getIconName()"
+    [size]="24"
+    [color]="getIconColor()"
+  ></tabler-icon>
+
+  <span>{{ message() }}</span>
+
+  @if (closable()) {
+    <button
+      class="alert-close"
+      (click)="onClose.emit()"
+      aria-label="Close alert"
+    >
+      ×
+    </button>
+  }
+</div>
