@@ -1,0 +1,14 @@
+<img 
+  [src]="src()" 
+  [alt]="alt()"
+  [loading]="loading() ? 'lazy' : 'eager'"
+  [title]="alt()"
+  class="img"
+/>
+@if (placeholder()) {
+  <div class="placeholder absolute inset-0 flex items-center justify-center">
+    @if (loading()) {
+      <span class="spinner-border spinner-border-sm" role="status"></span>
+    }
+  </div>
+}
