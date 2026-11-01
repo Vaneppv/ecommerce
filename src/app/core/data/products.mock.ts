@@ -1,9 +1,5 @@
 import { Product } from '../models/product';
 
-/**
- * Datos locales simulados. Cuando se conecte una API real, este archivo se
- * puede eliminar: solo hay que cambiar el cuerpo de ProductService.getPage().
- */
 const CATALOG: Record<string, string[]> = {
   electrónica: [
     'Auriculares inalámbricos', 'Teclado mecánico', 'Ratón ergonómico', 'Cargador rápido USB-C',
@@ -33,7 +29,6 @@ function buildProducts(): Product[] {
   const perCategory = CATALOG[categories[0]].length;
   let id = 1;
 
-  // Se intercalan las categorías para que cada página muestre variedad.
   for (let i = 0; i < perCategory; i++) {
     for (const category of categories) {
       const title = CATALOG[category][i];
