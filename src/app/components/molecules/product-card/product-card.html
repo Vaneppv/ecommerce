@@ -1,0 +1,12 @@
+<article class="card">
+  <div class="thumb">
+    <app-image [src]="product().thumbnail" [alt]="product().title" />
+  </div>
+  <h2 class="title">{{ product().title }}</h2>
+  <p class="category">{{ product().category }}</p>
+  <p class="price">{{ product().price | currency }}</p>
+  <!-- TODO: reemplazar por <app-button> cuando se corrija el átomo Button -->
+  <button type="button" class="add" (click)="onAdd.emit(product())">
+    Agregar al carrito<span class="sr-only">: {{ product().title }}</span>
+  </button>
+</article>

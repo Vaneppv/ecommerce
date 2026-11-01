@@ -1,0 +1,86 @@
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  height: 100%;
+  padding: 0.75rem;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+}
+
+/* Reserva el espacio de la imagen y muestra un esqueleto animado mientras carga */
+.thumb {
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  border-radius: 6px;
+  background: linear-gradient(90deg, #f3f4f6 25%, #e5e7eb 50%, #f3f4f6 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.2s infinite;
+}
+
+.thumb app-image {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.title {
+  margin: 0.25rem 0 0;
+  font-size: 1rem;
+}
+
+.category {
+  margin: 0;
+  color: #6b7280;
+  font-size: 0.8125rem;
+  text-transform: capitalize;
+}
+
+.price {
+  margin: 0;
+  font-weight: 600;
+}
+
+.add {
+  margin-top: auto;
+  padding: 0.5rem 0.75rem;
+  border: 0;
+  border-radius: 6px;
+  background: #1d4ed8;
+  color: #fff;
+  font: inherit;
+  cursor: pointer;
+}
+
+.add:hover {
+  background: #1e40af;
+}
+
+.add:focus-visible {
+  outline: 2px solid #1d4ed8;
+  outline-offset: 2px;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+@keyframes shimmer {
+  to {
+    background-position: -200% 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .thumb {
+    animation: none;
+  }
+}
