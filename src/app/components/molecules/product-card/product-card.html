@@ -1,0 +1,32 @@
+<app-image
+  [src]="productImage()"
+  [alt]="productTitle()"
+  [loading]="isFetching()"
+  (onLoad)="onImageLoad.emit()"
+  (onError)="onImageError.emit($event)"
+></app-image>
+
+<div class="product-card-content">
+  <h3 class="product-title">{{ productTitle() | titlecase }}</h3>
+  <p class="product-price">{{ productPrice() | currency }}</p>
+
+  <div class="product-actions">
+    <app-button
+      variant="primary"
+      size="small"
+      (click)="onAddToCart.emit(undefined)"
+      [disabled]="isOutOfStock()"
+    >
+      Añadir al carrito
+    </app-button>
+
+    <app-button
+      variant="ghost"
+      size="small"
+      (click)="onQuickView.emit(undefined)"
+      title="Quick view"
+    >
+      <svg>...</svg> Ver detalles
+    </app-button>
+</div>
+</div>

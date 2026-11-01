@@ -1,4 +1,4 @@
-/* Base button styles */
+
 .btn {
   display: inline-flex;
   align-items: center;
@@ -14,7 +14,6 @@
   background-color: transparent;
 }
 
-/* Primary variant */
 .btn.primary {
   background-color: #3b82f6;
   color: white;
@@ -24,7 +23,6 @@
   background-color: #2563eb;
 }
 
-/* Secondary variant */
 .btn.secondary {
   background-color: #6b7280;
   color: white;
@@ -34,7 +32,6 @@
   background-color: #4b5563;
 }
 
-/* Ghost variant */
 .btn.ghost {
   background: transparent;
   color: #374151;
@@ -42,16 +39,14 @@
 }
 
 .btn.ghost:hover:not(:disabled) {
-  background-color: #f3f4f6; 
+  background-color: #f3f4f6;
 }
 
-/* Disabled state */
 .btn:disabled {
   opacity: 0.5;
   cursor: not-allowed;
 }
 
-/* Loading state */
 .spinner-border {
   width: 0.875rem;
   height: 0.875rem;
