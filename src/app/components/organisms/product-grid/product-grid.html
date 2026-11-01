@@ -1,0 +1,18 @@
+<ul class="grid">
+  @for (p of products(); track p.id) {
+    <li><app-product-card [product]="p" (onAdd)="onAdd.emit($event)" /></li>
+  }
+</ul>
+
+@if (loading()) {
+  <p class="status" role="status">Cargando productos…</p>
+}
+
+@if (error(); as message) {
+  <p class="error" role="alert">{{ message }}</p>
+  <button type="button" class="retry" (click)="onRetry.emit()">Reintentar</button>
+} @else if (hasMore() && !loading()) {
+  <div appInfiniteScroll (reached)="onLoadMore.emit()"></div>
+} @else if (!loading() && products().length > 0) {
+  <p class="status">Llegaste al final del catálogo.</p>
+}
