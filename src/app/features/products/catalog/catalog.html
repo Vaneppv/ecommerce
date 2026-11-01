@@ -1,0 +1,15 @@
+<h1>Catálogo</h1>
+
+@if (notice(); as text) {
+  <p class="notice" role="status">{{ text }}</p>
+}
+
+<app-product-grid
+  [products]="products()"
+  [loading]="loading()"
+  [error]="error()"
+  [hasMore]="hasMore()"
+  (onLoadMore)="loadMore()"
+  (onRetry)="loadMore()"
+  (onAdd)="addToCart($event)"
+/>
