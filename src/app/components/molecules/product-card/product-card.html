@@ -1,12 +1,32 @@
-<article class="card">
-  <div class="thumb">
-    <app-image [src]="product().thumbnail" [alt]="product().title" />
-  </div>
-  <h2 class="title">{{ product().title }}</h2>
-  <p class="category">{{ product().category }}</p>
-  <p class="price">{{ product().price | currency }}</p>
-  <!-- TODO: reemplazar por <app-button> cuando se corrija el átomo Button -->
-  <button type="button" class="add" (click)="onAdd.emit(product())">
-    Agregar al carrito<span class="sr-only">: {{ product().title }}</span>
-  </button>
-</article>
+<app-image
+  [src]="productImage()"
+  [alt]="productTitle()"
+  [loading]="isFetching()"
+  (onLoad)="onImageLoad.emit()"
+  (onError)="onImageError.emit($event)"
+></app-image>
+
+<div class="product-card-content">
+  <h3 class="product-title">{{ productTitle() | titlecase }}</h3>
+  <p class="product-price">{{ productPrice() | currency }}</p>
+
+  <div class="product-actions">
+    <app-button
+      variant="primary"
+      size="small"
+      (click)="onAddToCart.emit(undefined)"
+      [disabled]="isOutOfStock()"
+    >
+      Añadir al carrito
+    </app-button>
+
+    <app-button
+      variant="ghost"
+      size="small"
+      (click)="onQuickView.emit(undefined)"
+      title="Quick view"
+    >
+      <svg>...</svg> Ver detalles
+    </app-button>
+</div>
+</div>
