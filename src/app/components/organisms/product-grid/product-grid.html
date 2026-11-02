@@ -1,6 +1,14 @@
 <ul class="grid">
   @for (p of products(); track p.id) {
-    <li><app-product-card [product]="p" (onAdd)="onAdd.emit($event)" /></li>
+    <li>
+      <app-product-card
+        [productImage]="p.thumbnail"
+        [productTitle]="p.title"
+        [productPrice]="p.price.toString()"
+        [isFetching]="true"
+        (onAddToCart)="onAdd.emit(p)"
+      />
+    </li>
   }
 </ul>
 
