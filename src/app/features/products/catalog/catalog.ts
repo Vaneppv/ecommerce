@@ -3,10 +3,12 @@ import { finalize } from 'rxjs';
 import { ProductGrid } from '../../../components/organisms/product-grid/product-grid';
 import { Product } from '../../../core/models/product';
 import { ProductService } from '../../../core/product-service';
+import { CategoryFilter } from '../../../components/molecules/category-filter/category-filter';
+import { SearchForm } from '../../../components/molecules/search-form/search-form';
 
 @Component({
   selector: 'app-catalog',
-  imports: [ProductGrid],
+  imports: [ProductGrid, CategoryFilter, SearchForm],
   templateUrl: './catalog.html',
   styleUrl: './catalog.css',
 })
@@ -22,6 +24,9 @@ export class Catalog {
   readonly notice = signal<string | null>(null);
   readonly hasMore = computed(() => this.products().length < this.total());
 
+  readonly searchTerm = signal('');
+  readonly selectedCategory = signal('');
+
   constructor() {
     this.loadMore();
   }
@@ -32,8 +37,12 @@ export class Catalog {
     this.loading.set(true);
     this.error.set(null);
 
+    const skip = this.products().length;
+    const category = this.selectedCategory();
+    const search = this.searchTerm();
+
     this.productService
-      .getPage(this.products().length, this.pageSize)
+      .getPage(skip, this.pageSize)
       .pipe(finalize(() => this.loading.set(false)))
       .subscribe({
         next: (page) => {
@@ -42,6 +51,20 @@ export class Catalog {
         },
         error: () => this.error.set('No se pudieron cargar los productos.'),
       });
+  }
+
+  setSearch(term: string) {
+    this.searchTerm.set(term);
+    this.products.set([]);
+    this.total.set(0);
+    this.loadMore();
+  }
+
+  setCategory(category: string) {
+    this.selectedCategory.set(category);
+    this.products.set([]);
+    this.total.set(0);
+    this.loadMore();
   }
 
   addToCart(product: Product) {

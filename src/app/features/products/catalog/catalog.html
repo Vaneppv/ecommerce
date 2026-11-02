@@ -1,8 +1,18 @@
-<h1>Catálogo</h1>
+<h1>Productos</h1>
 
 @if (notice(); as text) {
   <p class="notice" role="status">{{ text }}</p>
 }
+
+<app-search-form
+  placeholder="Buscar productos..."
+  (onSearch)="setSearch($event)"
+/>
+
+<app-category-filter
+  [categories]="['belleza', 'electrónica', 'hogar', 'ropa', 'deportes']"
+  (onCategoryChange)="setCategory($event)"
+/>
 
 <app-product-grid
   [products]="products()"

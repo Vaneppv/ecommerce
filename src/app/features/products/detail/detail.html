@@ -1,0 +1,38 @@
+<h1>Product Detail</h1>
+
+@if (loading()) {
+  <p>Cargando producto…</p>
+}
+
+@if (error(); as message) {
+  <p class="error">{{ message }}</p>
+} @else if (product()) {
+  <div class="product-detail">
+    <img
+      [src]="product()!.thumbnail"
+      [alt]="product()!.title"
+      loading="lazy"
+    />
+
+    <div class="detail-info">
+      <h2>{{ product()!.title }}</h2>
+      <p class="price">${{ product()!.price }}</p>
+      <p class="category">Categoría: {{ product()!.category }}</p>
+      <p class="rating">
+        Rating: {{ product()!.rating }}@for (star of [1, 2, 3, 4, 5]; track star) { &#9733; }
+      </p>
+
+      <p class="description">{{ product()!.description }}</p>
+
+      <div class="specs">
+        <span>SKU: {{ product()!.sku }}</span>
+        <span>Marca: {{ product()!.brand }}</span>
+        <span>Stock: {{ product()!.stock }}</span>
+      </div>
+
+      <p class="return-policy">
+        {{ product()!.returnPolicy }}
+      </p>
+    </div>
+  </div>
+}
