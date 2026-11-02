@@ -7,7 +7,7 @@ import { ProductPage } from './models/product';
 
 @Injectable({ providedIn: 'root' })
 export class ProductService {
-  private readonly apiUrl = 'https://dummyjson.com/api/products';
+  private readonly apiUrl = 'https://dummyjson.com/products';
   private readonly latencyMs = 500;
 
   constructor(private http: HttpClient) {}
