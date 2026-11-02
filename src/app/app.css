@@ -8,18 +8,20 @@
   align-items: center;
   justify-content: space-between;
   padding: 0.75rem 1rem;
-  border-bottom: 1px solid #e5e7eb;
+  background: #8b5a2b;
+  color: #fdf6e3;
+  border-bottom: 1px solid #c9964a;
 }
 
 .brand {
   font-size: 1.125rem;
   font-weight: 700;
-  color: inherit;
+  color: #fdf6e3;
   text-decoration: none;
 }
 
 .brand:focus-visible {
-  outline: 2px solid #1d4ed8;
+  outline: 2px solid #d2b48c;
   outline-offset: 2px;
 }
 
