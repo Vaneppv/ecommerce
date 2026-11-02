@@ -10,7 +10,7 @@ import { Button } from '../../atoms/button/button';
   templateUrl: './category-filter.html'
 })
 export class CategoryFilter {
-  categories = input<string[]>(['electronics', 'roopa', 'hombre', 'mujer']);
+  categories = input<string[]>(['belleza', 'electrónica', 'hogar', 'ropa', 'deportes']);
   filteredCategories = input<string[]>([]);
   onCategoryChange = output<string>();
 }
