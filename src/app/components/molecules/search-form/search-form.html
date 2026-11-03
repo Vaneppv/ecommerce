@@ -1,15 +1,30 @@
-<div class="search-form">
-  <app-input
-    type="text"
-    placeholder="Buscar productos..."
-    (onInput)="onSearch.emit($event)"
-  ></app-input>
+<form class="search-form" (submit)="$event.preventDefault(); submitSearch()" role="search">
+  <div class="input-container" (keydown)="handleKeyDown($event)">
+    <app-input
+      type="search"
+      [value]="localTerm()"
+      [placeholder]="placeholder()"
+      (onInput)="handleInputChange($event)"
+    ></app-input>
+    @if (localTerm()) {
+      <button
+        type="button"
+        class="clear-btn"
+        (click)="clearSearch()"
+        aria-label="Limpiar búsqueda"
+      >
+        <tabler-icon icon="x" [size]="16"></tabler-icon>
+      </button>
+    }
+  </div>
 
   <app-button
     variant="primary"
-    size="small"
-    (click)="performSearch.emit()"
+    size="medium"
+    type="submit"
+    (onClick)="submitSearch()"
   >
-    Buscar
+    <tabler-icon icon="search" [size]="16"></tabler-icon>
+    <span>Buscar</span>
   </app-button>
-</div>
+</form>

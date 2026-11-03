@@ -37,7 +37,15 @@ const item = (id: number): Product => ({
 function setup(getPage: ProductService['getPage']) {
   TestBed.configureTestingModule({
     imports: [Catalog],
-    providers: [{ provide: ProductService, useValue: { getPage } }],
+    providers: [
+      {
+        provide: ProductService,
+        useValue: {
+          getPage,
+          getCategories: () => of(['electrónica', 'hogar', 'ropa', 'deportes']),
+        },
+      },
+    ],
   });
   return TestBed.createComponent(Catalog).componentInstance;
 }
@@ -50,6 +58,7 @@ describe('Catalog', () => {
     expect(catalog.products().length).toBe(2);
     expect(catalog.hasMore()).toBe(true);
     expect(catalog.loading()).toBe(false);
+    expect(catalog.categories().length).toBe(4);
   });
 
   it('indica que no hay más cuando se cargó todo', () => {
@@ -69,5 +78,17 @@ describe('Catalog', () => {
     const catalog = setup(() => of({ products: [item(1)], total: 1, skip: 0, limit: 20 }));
     catalog.addToCart(item(1));
     expect(catalog.notice()).toContain('Producto 1');
+  });
+
+  it('actualiza categoría y resetea productos al llamar setCategory', () => {
+    const catalog = setup(() => of({ products: [item(1)], total: 1, skip: 0, limit: 20 }));
+    catalog.setCategory('ropa');
+    expect(catalog.selectedCategory()).toBe('ropa');
+  });
+
+  it('actualiza término de búsqueda al llamar setSearch', () => {
+    const catalog = setup(() => of({ products: [item(1)], total: 1, skip: 0, limit: 20 }));
+    catalog.setSearch('auriculares');
+    expect(catalog.searchTerm()).toBe('auriculares');
   });
 });

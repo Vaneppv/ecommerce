@@ -1,16 +1,17 @@
-<h1>Productos</h1>
+<h1>Catálogo de Productos</h1>
 
 @if (notice(); as text) {
   <p class="notice" role="status">{{ text }}</p>
 }
 
 <app-search-form
-  placeholder="Buscar productos..."
+  placeholder="Buscar por nombre o descripción..."
   (onSearch)="setSearch($event)"
 />
 
 <app-category-filter
-  [categories]="['belleza', 'electrónica', 'hogar', 'ropa', 'deportes']"
+  [categories]="categories()"
+  [selectedCategory]="selectedCategory()"
   (onCategoryChange)="setCategory($event)"
 />
 

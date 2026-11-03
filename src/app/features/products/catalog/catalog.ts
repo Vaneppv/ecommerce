@@ -24,11 +24,19 @@ export class Catalog {
   readonly notice = signal<string | null>(null);
   readonly hasMore = computed(() => this.products().length < this.total());
 
+  readonly categories = signal<string[]>([]);
   readonly searchTerm = signal('');
-  readonly selectedCategory = signal('');
+  readonly selectedCategory = signal('todas');
 
   constructor() {
+    this.loadCategories();
     this.loadMore();
+  }
+
+  loadCategories() {
+    this.productService.getCategories().subscribe({
+      next: (cats) => this.categories.set(cats),
+    });
   }
 
   loadMore() {
@@ -42,7 +50,7 @@ export class Catalog {
     const search = this.searchTerm();
 
     this.productService
-      .getPage(skip, this.pageSize)
+      .getPage(skip, this.pageSize, category, search)
       .pipe(finalize(() => this.loading.set(false)))
       .subscribe({
         next: (page) => {
@@ -68,7 +76,7 @@ export class Catalog {
   }
 
   addToCart(product: Product) {
-    // Provisional: se reemplazará por CartService.add(product) al construir el carrito.
+    // Provisional: se conectará formalmente con CartService
     this.notice.set(`"${product.title}" agregado al carrito`);
     clearTimeout(this.noticeTimer);
     this.noticeTimer = setTimeout(() => this.notice.set(null), 3000);
