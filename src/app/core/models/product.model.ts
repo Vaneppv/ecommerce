@@ -1,39 +1,50 @@
-export interface Product {
+export interface BaseProduct {
   id: number;
   title: string;
   description: string;
   category: string;
   price: number;
-  discountPercentage: number;
   rating: number;
+  thumbnail: string;
+}
+
+export interface ProductDimensions {
+  width: number;
+  height: number;
+  depth: number;
+}
+
+export interface ProductReview {
+  rating: number;
+  comment: string;
+  date: string;
+  reviewerName: string;
+  reviewerEmail: string;
+}
+
+export interface ProductMeta {
+  createdAt: string;
+  updatedAt: string;
+  barcode: string;
+  qrCode: string;
+}
+
+export interface Product extends BaseProduct {
+  discountPercentage: number;
   stock: number;
   tags: string[];
   brand: string;
   sku: string;
   weight: number;
-  dimensions: {
-    width: number;
-    height: number;
-    depth: number;
-  };
+  dimensions: ProductDimensions;
   warrantyInformation: string;
   shippingInformation: string;
   availabilityStatus: string;
-  reviews: {
-    rating: number;
-    comment: string;
-    date: string;
-    reviewerName: string;
-    reviewerEmail: string;
-  }[];
+  reviews: ProductReview[];
   returnPolicy: string;
   minimumOrderQuantity: number;
-  meta: {
-    createdAt: string;
-    updatedAt: string;
-    barcode: string;
-    qrCode: string;
-  };
-  thumbnail: string;
+  meta: ProductMeta;
   images: string[];
 }
+
+export type { ProductPage } from './product-page.model';

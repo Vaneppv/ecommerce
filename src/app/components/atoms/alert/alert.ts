@@ -33,11 +33,11 @@ export class Alert {
 
   getIconName(): string {
     switch (this.type()) {
-      case 'success': return 'check-circle';
-      case 'error': return 'x-circle';
+      case 'success': return 'circle-check';
+      case 'error': return 'circle-x';
       case 'warning': return 'alert-triangle';
-      case 'info': return 'info';
-      default: return 'info';
+      case 'info': return 'info-circle';
+      default: return 'info-circle';
     }
   }
 

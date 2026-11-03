@@ -1,17 +1,37 @@
 import { TestBed } from '@angular/core/testing';
 import { of, throwError } from 'rxjs';
-import { Product } from '../../../core/models/product';
+import { Product } from '../../../core/models/product.model';
 import { ProductService } from '../../../core/product-service';
 import { Catalog } from './catalog';
 
 const item = (id: number): Product => ({
   id,
   title: `Producto ${id}`,
-  description: '',
+  description: `Descripción del producto ${id}`,
   category: 'hogar',
   price: 10,
   rating: 4,
   thumbnail: `https://example.com/${id}.webp`,
+  discountPercentage: 0,
+  stock: 10,
+  tags: ['hogar'],
+  brand: 'Brand',
+  sku: `SKU-${id}`,
+  weight: 1,
+  dimensions: { width: 10, height: 10, depth: 10 },
+  warrantyInformation: '1 month warranty',
+  shippingInformation: 'Ships in 1 month',
+  availabilityStatus: 'In Stock',
+  reviews: [],
+  returnPolicy: '30 days return policy',
+  minimumOrderQuantity: 1,
+  meta: {
+    createdAt: '2024-05-23T08:56:21.618Z',
+    updatedAt: '2024-05-23T08:56:21.618Z',
+    barcode: '1234567890',
+    qrCode: 'qr',
+  },
+  images: [`https://example.com/${id}.webp`],
 });
 
 function setup(getPage: ProductService['getPage']) {

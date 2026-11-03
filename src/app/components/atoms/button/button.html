@@ -1,14 +1,13 @@
 <button
-  [disabled]="disabled || loading"
-  class="btn"
+  [type]="type()"
+  [disabled]="disabled() || loading()"
+  [class]="'btn ' + variant() + ' ' + size()"
   (click)="onClick.emit()"
 >
   @if (loading()) {
-    <span class="spinner-border spinner-border-sm me-2" role="status">
-      <span class="visually-hidden">Cargando...</span>
-    </span>Cargando...
+    <span class="spinner" role="status" aria-hidden="true"></span>
+    <span>Cargando...</span>
   } @else {
     <ng-content></ng-content>
   }
 </button>
-
