@@ -1,9 +1,12 @@
+:host {
+  display: block;
+}
+
 .search-form {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  max-width: 550px;
-  margin-bottom: 1rem;
+  margin-bottom: 0;
 }
 
 .input-container {
@@ -22,7 +25,7 @@
   right: 0.75rem;
   background: transparent;
   border: none;
-  color: #6b4f3b;
+  color: var(--color-muted);
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -35,8 +38,8 @@
 }
 
 .clear-btn:hover {
-  background-color: #ecdcc9;
-  color: #3d2a1f;
+  background-color: #efe7dc;
+  color: var(--color-text);
 }
 
 app-button span {

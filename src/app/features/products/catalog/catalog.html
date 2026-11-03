@@ -1,16 +1,32 @@
-<h1>Catálogo de Productos</h1>
+<header class="catalog-header">
+  <p class="eyebrow">Tienda</p>
+  <h1>Catálogo de Productos</h1>
+  <p class="catalog-subtitle">Encuentra productos para tu día a día.</p>
+</header>
 
 @if (notice(); as text) {
   <p class="notice" role="status">{{ text }}</p>
 }
 
-<app-search-form placeholder="Buscar por nombre o descripción..." (onSearch)="setSearch($event)" />
+<section class="catalog-controls" aria-label="Buscar y filtrar productos">
+  <app-search-form
+    placeholder="Buscar por nombre o descripción..."
+    (onSearch)="setSearch($event)"
+  />
 
-<app-category-filter
-  [categories]="categories()"
-  [selectedCategory]="selectedCategory()"
-  (onCategoryChange)="setCategory($event)"
-/>
+  <div class="category-heading">
+    <span>Categorías</span>
+    @if (selectedCategory().toLowerCase() !== 'todas') {
+      <button type="button" class="clear-filters" (click)="setCategory('todas')">Ver todas</button>
+    }
+  </div>
+
+  <app-category-filter
+    [categories]="categories()"
+    [selectedCategory]="selectedCategory()"
+    (onCategoryChange)="setCategory($event)"
+  />
+</section>
 
 <app-product-grid
   [products]="products()"

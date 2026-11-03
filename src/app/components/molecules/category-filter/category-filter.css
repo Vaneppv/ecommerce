@@ -2,16 +2,35 @@
   display: flex;
   flex-wrap: wrap;
   gap: 0.5rem;
-  margin-bottom: 1.25rem;
+  margin-bottom: 0;
 }
 
 @media (max-width: 640px) {
   .category-filter {
     flex-wrap: nowrap;
     overflow-x: auto;
-    padding: 0.25rem 0 0.5rem;
-    scrollbar-width: thin;
+    margin-inline: -0.75rem;
+    padding: 0.25rem 0.75rem 0.5rem;
+    scrollbar-width: none;
     -webkit-overflow-scrolling: touch;
+    mask-image: linear-gradient(
+      to right,
+      transparent,
+      #000 12px,
+      #000 calc(100% - 12px),
+      transparent
+    );
+    -webkit-mask-image: linear-gradient(
+      to right,
+      transparent,
+      #000 12px,
+      #000 calc(100% - 12px),
+      transparent
+    );
+  }
+
+  .category-filter::-webkit-scrollbar {
+    display: none;
   }
 
   app-category-chip {
