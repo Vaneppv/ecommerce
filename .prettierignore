@@ -1,0 +1,20 @@
+# Build & cache outputs
+dist/
+.angular/
+.cache/
+coverage/
+
+# Dependencies & Lockfiles
+node_modules/
+package-lock.json
+pnpm-lock.yaml
+
+# Version control & agent/IDE directories
+.git/
+.vscode/
+.idea/
+.gemini/
+
+# Logs & temp files
+*.log
+*.tmp
