@@ -5,33 +5,16 @@
   margin-bottom: 1.25rem;
 }
 
-.category-btn {
-  background: #f5ede2;
-  color: #3d2a1f;
-  padding: 0.4rem 0.9rem;
-  border-radius: 9999px;
-  border: 1px solid #d2b48c;
-  font-size: 0.85rem;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
+@media (max-width: 640px) {
+  .category-filter {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    padding: 0.25rem 0 0.5rem;
+    scrollbar-width: thin;
+    -webkit-overflow-scrolling: touch;
+  }
 
-.category-btn:hover:not(.selected) {
-  background: #c9964a;
-  color: #fdf6e3;
-  border-color: #c9964a;
-}
-
-.category-btn.selected {
-  background: #8b5a2b;
-  color: #fdf6e3;
-  border-color: #8b5a2b;
-  font-weight: 600;
-  box-shadow: 0 2px 4px rgba(139, 90, 43, 0.2);
-}
-
-.category-btn:focus-visible {
-  outline: 2px solid #8b5a2b;
-  outline-offset: 2px;
+  app-category-chip {
+    flex: 0 0 auto;
+  }
 }

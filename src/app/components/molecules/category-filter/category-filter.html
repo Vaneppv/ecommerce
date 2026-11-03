@@ -1,20 +1,17 @@
 <div class="category-filter" role="group" aria-label="Filtro por categorías">
-  <button
-    type="button"
-    class="category-btn"
-    [class.selected]="!selectedCategory() || selectedCategory() === 'todas'"
-    (click)="onCategoryChange.emit('todas')"
-  >
-    Todas
-  </button>
+  <app-category-chip
+    label="Todas"
+    value="todas"
+    [active]="isAllSelected()"
+    (selected)="onCategoryChange.emit($event)"
+  />
+
   @for (category of categories(); track category) {
-    <button
-      type="button"
-      class="category-btn"
-      [class.selected]="selectedCategory().toLowerCase() === category.toLowerCase()"
-      (click)="onCategoryChange.emit(category)"
-    >
-      {{ category | titlecase }}
-    </button>
+    <app-category-chip
+      [label]="category | titlecase"
+      [value]="category"
+      [active]="isSelected(category)"
+      (selected)="onCategoryChange.emit($event)"
+    />
   }
 </div>
