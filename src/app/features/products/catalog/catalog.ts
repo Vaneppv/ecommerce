@@ -1,7 +1,7 @@
 import { Component, computed, inject, signal } from '@angular/core';
 import { finalize } from 'rxjs';
 import { ProductGrid } from '../../../components/organisms/product-grid/product-grid';
-import { Product } from '../../../core/models/product';
+import { Product } from '../../../core/models/product.model';
 import { ProductService } from '../../../core/product-service';
 import { CategoryFilter } from '../../../components/molecules/category-filter/category-filter';
 import { SearchForm } from '../../../components/molecules/search-form/search-form';

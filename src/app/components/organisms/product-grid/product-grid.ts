@@ -1,5 +1,5 @@
 import { Component, input, output } from '@angular/core';
-import { Product } from '../../../core/models/product';
+import { Product } from '../../../core/models/product.model';
 import { InfiniteScroll } from '../../../directives/infinite-scroll';
 import { ProductCard } from '../../molecules/product-card/product-card';
 

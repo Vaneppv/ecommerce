@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { delay, Observable, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
-import { ProductPage } from './models/product';
+import { ProductPage } from './models/product.model';
 import { PRODUCTS } from './data/products.mock';
 
 @Injectable({ providedIn: 'root' })

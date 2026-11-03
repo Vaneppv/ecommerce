@@ -1,6 +1,6 @@
 import { Component, inject, signal } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Product } from '../../../core/models/product';
+import { Product } from '../../../core/models/product.model';
 import { ProductService } from '../../../core/product-service';
 
 @Component({
@@ -26,21 +26,19 @@ export class ProductDetail {
     this.loading.set(true);
     this.error.set(null);
 
-    this.productService
-      .getPage(id - 1, 1)
-      .subscribe({
-        next: (page) => {
-          if (page.products.length > 0) {
-            this.product.set(page.products[0]);
-          } else {
-            this.error.set('Producto no encontrado');
-          }
-          this.loading.set(false);
-        },
-        error: () => {
-          this.error.set('No se pudo cargar el producto.');
-          this.loading.set(false);
-        },
-      });
+    this.productService.getPage(id - 1, 1).subscribe({
+      next: (page) => {
+        if (page.products.length > 0) {
+          this.product.set(page.products[0]);
+        } else {
+          this.error.set('Producto no encontrado');
+        }
+        this.loading.set(false);
+      },
+      error: () => {
+        this.error.set('No se pudo cargar el producto.');
+        this.loading.set(false);
+      },
+    });
   }
 }
