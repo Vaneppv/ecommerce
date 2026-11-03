@@ -1,4 +1,4 @@
-import { Component, input, output } from '@angular/core';
+import { Component, input, output, OnInit, OnDestroy } from '@angular/core';
 import { TablerIconComponent } from '@tabler/icons-angular';
 
 @Component({
@@ -8,29 +8,41 @@ import { TablerIconComponent } from '@tabler/icons-angular';
   styleUrl: './alert.css',
   templateUrl: './alert.html',
 })
-export class Alert {
+export class Alert implements OnInit, OnDestroy {
   type = input<'success' | 'error' | 'warning' | 'info'>('info');
   closable = input<boolean>(true);
   timeout = input<number | null>(3);
   message = input<string>('');
   onClose = output<void>();
 
-  private timer: any;
+  private timer?: ReturnType<typeof setTimeout>;
 
   ngOnInit() {
-    if (this.timeout() != null) {
-      this.timer = setTimeout(
-        () => {
-          this.onClose.emit();
-        },
-        (this.timeout() ?? 3) * 1000,
-      );
-    }
+    this.setupTimer();
   }
 
   ngOnDestroy() {
+    this.clearTimer();
+  }
+
+  close() {
+    this.clearTimer();
+    this.onClose.emit();
+  }
+
+  private setupTimer() {
+    const timer = this.timeout();
+    if (timer !== null && timer !== undefined && timer > 0) {
+      this.timer = setTimeout(() => {
+        this.close();
+      }, timer * 1000);
+    }
+  }
+
+  private clearTimer() {
     if (this.timer) {
       clearTimeout(this.timer);
+      this.timer = undefined;
     }
   }
 

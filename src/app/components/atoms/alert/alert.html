@@ -12,6 +12,6 @@
   <span>{{ message() }}</span>
 
   @if (closable()) {
-    <button class="alert-close" (click)="onClose.emit()" aria-label="Close alert">×</button>
+    <button class="alert-close" (click)="close()" aria-label="Close alert">×</button>
   }
 </div>
