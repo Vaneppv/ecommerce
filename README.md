@@ -55,63 +55,63 @@ ng e2e
 Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
 
 ## Estructura del Proyecto (por ahora)
+
 src/
 ├── app/
-│   ├── core/                    # Core singleton services
-│   │   ├── auth.service.ts      # Login/logout state & token
-│   │   ├── cart.service.ts      # Cart state (add/remove/quantity)
-│   │   └── http.service.ts      # HTTP client for external API
-│   │
-│   ├── shared/                  # Atoms & Molecules (reusable UI)
-│   │   ├── atoms/               # Basic UI elements
-│   │   │   ├── button.component.ts
-│   │   │   ├── input.component.ts
-│   │   │   ├── loader.component.ts
-│   │   │   └── image-preview.component.ts
-│   │   │
-│   │   ├── molecules/           # Small groups of atoms
-│   │   │   ├── product-card.component.ts
-│   │   │   ├── search-bar.component.ts
-│   │   │   └── filter-chip.component.ts
-│   │   │
-│   │   └── organisms/           # Complex UI sections
-│   │       ├── product-grid.component.ts
-│   │       └── category-nav.component.ts
-│   │
-│   ├── features/                # Feature-based organization
-│   │   ├── home/                # Home page template
-│   │   │   └── home.component.ts
-│   │   │
-│   │   ├── products/            # Products feature
-│   │   │   ├── components/      # Product organisms
-│   │   │   │   ├── product-list.component.ts
-│   │   │   │   └── infinite-scroll.component.ts
-│   │   │   │
-│   │   │   ├── containers/      # Page-level components
-│   │   │   │    ├── product-list.component.ts
-│   │   │   │    └── product-detail.component.ts
-│   │   │   │
-│   │   │   └── product.routes.ts
-│   │   │
-│   │   ├── cart/                # Cart feature
-│   │   │   ├── cart-summary.component.ts
-│   │   │   ├── cart-item.component.ts
-│   │   │   └── checkout-form.component.ts
-│   │   │
-│   │   └── auth/                # Auth feature
-│   │       ├── login.component.ts
-│   │       └── register.component.ts
-│   │
-│   ├── layouts/                 # Templates/Layouts
-│   │   ├── home/                # Home page layout
-│   │   │   └── home-layout.component.ts
-│   │   │
-│   │   └── product/             # Product category layout
-│   │       └── product-layout.component.ts
-│   │
-│   ├── app.config.ts            # Angular config with providers
-│   ├── app.routes.ts            # Feature routing
-│   └── main.ts
+│ ├── core/ # Core singleton services
+│ │ ├── auth.service.ts # Login/logout state & token
+│ │ ├── cart.service.ts # Cart state (add/remove/quantity)
+│ │ └── http.service.ts # HTTP client for external API
+│ │
+│ ├── shared/ # Atoms & Molecules (reusable UI)
+│ │ ├── atoms/ # Basic UI elements
+│ │ │ ├── button.component.ts
+│ │ │ ├── input.component.ts
+│ │ │ ├── loader.component.ts
+│ │ │ └── image-preview.component.ts
+│ │ │
+│ │ ├── molecules/ # Small groups of atoms
+│ │ │ ├── product-card.component.ts
+│ │ │ ├── search-bar.component.ts
+│ │ │ └── filter-chip.component.ts
+│ │ │
+│ │ └── organisms/ # Complex UI sections
+│ │ ├── product-grid.component.ts
+│ │ └── category-nav.component.ts
+│ │
+│ ├── features/ # Feature-based organization
+│ │ ├── home/ # Home page template
+│ │ │ └── home.component.ts
+│ │ │
+│ │ ├── products/ # Products feature
+│ │ │ ├── components/ # Product organisms
+│ │ │ │ ├── product-list.component.ts
+│ │ │ │ └── infinite-scroll.component.ts
+│ │ │ │
+│ │ │ ├── containers/ # Page-level components
+│ │ │ │ ├── product-list.component.ts
+│ │ │ │ └── product-detail.component.ts
+│ │ │ │
+│ │ │ └── product.routes.ts
+│ │ │
+│ │ ├── cart/ # Cart feature
+│ │ │ ├── cart-summary.component.ts
+│ │ │ ├── cart-item.component.ts
+│ │ │ └── checkout-form.component.ts
+│ │ │
+│ │ └── auth/ # Auth feature
+│ │ ├── login.component.ts
+│ │ └── register.component.ts
+│ │
+│ ├── layouts/ # Templates/Layouts
+│ │ ├── home/ # Home page layout
+│ │ │ └── home-layout.component.ts
+│ │ │
+│ │ └── product/ # Product category layout
+│ │ └── product-layout.component.ts
+│ │
+│ ├── app.config.ts # Angular config with providers
+│ ├── app.routes.ts # Feature routing
+│ └── main.ts
 │
-└── environments/                # Environment configs (dev/prod)
-
+└── environments/ # Environment configs (dev/prod)

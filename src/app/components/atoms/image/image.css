@@ -16,7 +16,10 @@ img {
   object-fit: cover;
   border-radius: 6px;
   opacity: 0;
-  transition: opacity 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
+  transition:
+    opacity 0.3s ease,
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
 img.loaded {

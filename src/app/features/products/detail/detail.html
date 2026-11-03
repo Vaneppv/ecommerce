@@ -22,11 +22,7 @@
   } @else if (product(); as p) {
     <article class="product-layout">
       <div class="product-media">
-        <app-image
-          [src]="p.thumbnail"
-          [alt]="p.title"
-          [loading]="false"
-        ></app-image>
+        <app-image [src]="p.thumbnail" [alt]="p.title" [loading]="false"></app-image>
       </div>
 
       <div class="product-details">
@@ -64,7 +60,7 @@
             <div class="spec-item">
               <span class="spec-label">Disponibilidad</span>
               <span class="spec-value" [class.in-stock]="p.stock > 0">
-                {{ p.stock > 0 ? (p.stock + ' en stock') : 'Agotado' }}
+                {{ p.stock > 0 ? p.stock + ' en stock' : 'Agotado' }}
               </span>
             </div>
           }
@@ -107,14 +103,10 @@
         @if (p.shippingInformation || p.returnPolicy) {
           <div class="policies-box">
             @if (p.shippingInformation) {
-              <p class="policy-item">
-                <strong>Envío:</strong> {{ p.shippingInformation }}
-              </p>
+              <p class="policy-item"><strong>Envío:</strong> {{ p.shippingInformation }}</p>
             }
             @if (p.returnPolicy) {
-              <p class="policy-item">
-                <strong>Devolución:</strong> {{ p.returnPolicy }}
-              </p>
+              <p class="policy-item"><strong>Devolución:</strong> {{ p.returnPolicy }}</p>
             }
           </div>
         }

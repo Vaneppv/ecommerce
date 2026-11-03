@@ -7,10 +7,7 @@ describe('App', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [App],
-      providers: [
-        provideRouter([]),
-        provideTablerIcons({ IconShoppingCart }),
-      ],
+      providers: [provideRouter([]), provideTablerIcons({ IconShoppingCart })],
     }).compileComponents();
   });
 

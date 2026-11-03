@@ -9,14 +9,7 @@ import { Image } from '../../../components/atoms/image/image';
 
 @Component({
   selector: 'app-product-detail',
-  imports: [
-    RouterLink,
-    Button,
-    Image,
-    TablerIconComponent,
-    CurrencyPipe,
-    TitleCasePipe,
-  ],
+  imports: [RouterLink, Button, Image, TablerIconComponent, CurrencyPipe, TitleCasePipe],
   templateUrl: './detail.html',
   styleUrl: './detail.css',
 })
@@ -82,9 +75,7 @@ export class ProductDetail {
     const p = this.product();
     if (!p) return;
 
-    this.notice.set(
-      `Agregaste ${this.quantity()} unidad(es) de "${p.title}" al carrito`
-    );
+    this.notice.set(`Agregaste ${this.quantity()} unidad(es) de "${p.title}" al carrito`);
     clearTimeout(this.noticeTimer);
     this.noticeTimer = setTimeout(() => this.notice.set(null), 3500);
   }

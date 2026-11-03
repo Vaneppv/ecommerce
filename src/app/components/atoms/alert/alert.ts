@@ -6,10 +6,10 @@ import { TablerIconComponent } from '@tabler/icons-angular';
   imports: [TablerIconComponent],
   selector: 'app-alert',
   styleUrl: './alert.css',
-  templateUrl: './alert.html'
+  templateUrl: './alert.html',
 })
 export class Alert {
-  type = input<'success' | 'error' | 'warning' | 'info'> ('info');
+  type = input<'success' | 'error' | 'warning' | 'info'>('info');
   closable = input<boolean>(true);
   timeout = input<number | null>(3);
   message = input<string>('');
@@ -19,9 +19,12 @@ export class Alert {
 
   ngOnInit() {
     if (this.timeout() != null) {
-      this.timer = setTimeout(() => {
-        this.onClose.emit();
-      }, (this.timeout() ?? 3) * 1000);
+      this.timer = setTimeout(
+        () => {
+          this.onClose.emit();
+        },
+        (this.timeout() ?? 3) * 1000,
+      );
     }
   }
 
@@ -33,21 +36,31 @@ export class Alert {
 
   getIconName(): string {
     switch (this.type()) {
-      case 'success': return 'circle-check';
-      case 'error': return 'circle-x';
-      case 'warning': return 'alert-triangle';
-      case 'info': return 'info-circle';
-      default: return 'info-circle';
+      case 'success':
+        return 'circle-check';
+      case 'error':
+        return 'circle-x';
+      case 'warning':
+        return 'alert-triangle';
+      case 'info':
+        return 'info-circle';
+      default:
+        return 'info-circle';
     }
   }
 
   getIconColor(): string {
     switch (this.type()) {
-      case 'success': return '#059669';
-      case 'error': return '#DC2626';
-      case 'warning': return '#F59E0B';
-      case 'info': return '#2563EB';
-      default: return '#6B7280';
+      case 'success':
+        return '#059669';
+      case 'error':
+        return '#DC2626';
+      case 'warning':
+        return '#F59E0B';
+      case 'info':
+        return '#2563EB';
+      default:
+        return '#6B7280';
     }
   }
 }

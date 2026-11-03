@@ -4,10 +4,7 @@
   <p class="notice" role="status">{{ text }}</p>
 }
 
-<app-search-form
-  placeholder="Buscar por nombre o descripción..."
-  (onSearch)="setSearch($event)"
-/>
+<app-search-form placeholder="Buscar por nombre o descripción..." (onSearch)="setSearch($event)" />
 
 <app-category-filter
   [categories]="categories()"

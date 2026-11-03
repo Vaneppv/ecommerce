@@ -12,12 +12,7 @@ export class ProductService {
 
   constructor(private http: HttpClient) {}
 
-  getPage(
-    skip = 0,
-    limit = 20,
-    category = '',
-    search = ''
-  ): Observable<ProductPage> {
+  getPage(skip = 0, limit = 20, category = '', search = ''): Observable<ProductPage> {
     const trimmedCategory = category.trim().toLowerCase();
     const trimmedSearch = search.trim().toLowerCase();
 
@@ -31,32 +26,25 @@ export class ProductService {
 
     return this.http.get<ProductPage>(url).pipe(
       delay(this.latencyMs),
-      catchError(() =>
-        of(this.getFallbackPage(skip, limit, trimmedCategory, trimmedSearch))
-      )
+      catchError(() => of(this.getFallbackPage(skip, limit, trimmedCategory, trimmedSearch))),
     );
   }
 
   getProductById(id: number): Observable<Product | null> {
     return this.http.get<Product>(`${this.apiUrl}/${id}`).pipe(
       delay(this.latencyMs),
-      catchError(() => of(this.getFallbackProductById(id)))
+      catchError(() => of(this.getFallbackProductById(id))),
     );
   }
 
   getCategories(): Observable<string[]> {
     return this.http.get<string[]>(`${this.apiUrl}/category-list`).pipe(
       delay(this.latencyMs),
-      catchError(() => of(this.getFallbackCategories()))
+      catchError(() => of(this.getFallbackCategories())),
     );
   }
 
-  private getFallbackPage(
-    skip: number,
-    limit: number,
-    category = '',
-    search = ''
-  ): ProductPage {
+  private getFallbackPage(skip: number, limit: number, category = '', search = ''): ProductPage {
     const safeSkip = Math.max(0, skip);
     const safeLimit = Math.max(0, limit);
 
@@ -69,8 +57,7 @@ export class ProductService {
     if (search) {
       list = list.filter(
         (p) =>
-          p.title.toLowerCase().includes(search) ||
-          p.description.toLowerCase().includes(search)
+          p.title.toLowerCase().includes(search) || p.description.toLowerCase().includes(search),
       );
     }
 

@@ -52,9 +52,7 @@ function setup(getPage: ProductService['getPage']) {
 
 describe('Catalog', () => {
   it('carga la primera página al crearse', () => {
-    const catalog = setup(() =>
-      of({ products: [item(1), item(2)], total: 4, skip: 0, limit: 20 }),
-    );
+    const catalog = setup(() => of({ products: [item(1), item(2)], total: 4, skip: 0, limit: 20 }));
     expect(catalog.products().length).toBe(2);
     expect(catalog.hasMore()).toBe(true);
     expect(catalog.loading()).toBe(false);
@@ -62,9 +60,7 @@ describe('Catalog', () => {
   });
 
   it('indica que no hay más cuando se cargó todo', () => {
-    const catalog = setup(() =>
-      of({ products: [item(1), item(2)], total: 2, skip: 0, limit: 20 }),
-    );
+    const catalog = setup(() => of({ products: [item(1), item(2)], total: 2, skip: 0, limit: 20 }));
     expect(catalog.hasMore()).toBe(false);
   });
 

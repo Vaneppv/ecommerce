@@ -10,10 +10,7 @@ describe('CartBadge Atom', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [CartBadge],
-      providers: [
-        provideRouter([]),
-        provideTablerIcons({ IconShoppingCart }),
-      ],
+      providers: [provideRouter([]), provideTablerIcons({ IconShoppingCart })],
     }).compileComponents();
 
     fixture = TestBed.createComponent(CartBadge);

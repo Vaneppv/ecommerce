@@ -7,14 +7,7 @@ import { Button } from '../../atoms/button/button';
 
 @Component({
   standalone: true,
-  imports: [
-    Image,
-    Button,
-    RouterLink,
-    TablerIconComponent,
-    TitleCasePipe,
-    CurrencyPipe,
-  ],
+  imports: [Image, Button, RouterLink, TablerIconComponent, TitleCasePipe, CurrencyPipe],
   selector: 'app-product-card',
   styleUrl: './product-card.css',
   templateUrl: './product-card.html',

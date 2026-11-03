@@ -13,7 +13,6 @@ pnpm-lock.yaml
 .git/
 .vscode/
 .idea/
-.gemini/
 
 # Logs & temp files
 *.log
