@@ -2,6 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import { of, throwError } from 'rxjs';
 import { Product } from '../../../core/models/product.model';
 import { ProductService } from '../../../core/product-service';
+import { CartService } from '../../../core/cart.service';
 import { Catalog } from './catalog';
 
 const item = (id: number): Product => ({
@@ -70,10 +71,15 @@ describe('Catalog', () => {
     expect(catalog.loading()).toBe(false);
   });
 
-  it('muestra un aviso al agregar al carrito', () => {
+  it('muestra un aviso y agrega el producto al CartService al agregar al carrito', () => {
     const catalog = setup(() => of({ products: [item(1)], total: 1, skip: 0, limit: 20 }));
+    const cartService = TestBed.inject(CartService);
+    cartService.clearCart();
+
     catalog.addToCart(item(1));
     expect(catalog.notice()).toContain('Producto 1');
+    expect(cartService.totalCount()).toBe(1);
+    expect(cartService.items()[0].product.id).toBe(1);
   });
 
   it('actualiza categoría y resetea productos al llamar setCategory', () => {

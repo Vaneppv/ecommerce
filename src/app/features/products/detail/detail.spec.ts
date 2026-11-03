@@ -4,6 +4,7 @@ import { of, throwError } from 'rxjs';
 import { IconArrowLeft, IconShoppingCart, provideTablerIcons } from '@tabler/icons-angular';
 import { Product } from '../../../core/models/product.model';
 import { ProductService } from '../../../core/product-service';
+import { CartService } from '../../../core/cart.service';
 import { ProductDetail } from './detail';
 
 const mockProduct: Product = {
@@ -83,9 +84,17 @@ describe('ProductDetail', () => {
     expect(component.quantity()).toBe(1); // Mínimo 1
   });
 
-  it('muestra aviso al añadir al carrito', () => {
+  it('muestra aviso y añade el producto con su cantidad al CartService', () => {
+    const cartService = TestBed.inject(CartService);
+    cartService.clearCart();
+
+    component.incrementQuantity();
     component.addToCart();
+
     expect(component.notice()).toContain('Producto de Prueba');
+    expect(cartService.totalCount()).toBe(2);
+    expect(cartService.items()[0].quantity).toBe(2);
+    expect(cartService.items()[0].product.id).toBe(mockProduct.id);
   });
 
   it('muestra mensaje de error cuando el producto no se encuentra', () => {

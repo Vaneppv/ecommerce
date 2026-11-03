@@ -3,6 +3,7 @@ import { finalize } from 'rxjs';
 import { ProductGrid } from '../../../components/organisms/product-grid/product-grid';
 import { Product } from '../../../core/models/product.model';
 import { ProductService } from '../../../core/product-service';
+import { CartService } from '../../../core/cart.service';
 import { CategoryFilter } from '../../../components/molecules/category-filter/category-filter';
 import { SearchForm } from '../../../components/molecules/search-form/search-form';
 
@@ -14,6 +15,7 @@ import { SearchForm } from '../../../components/molecules/search-form/search-for
 })
 export class Catalog {
   private readonly productService = inject(ProductService);
+  private readonly cartService = inject(CartService);
   private readonly pageSize = 20;
   private noticeTimer?: ReturnType<typeof setTimeout>;
 
@@ -76,7 +78,7 @@ export class Catalog {
   }
 
   addToCart(product: Product) {
-    // Provisional: se conectará formalmente con CartService
+    this.cartService.addItem(product);
     this.notice.set(`"${product.title}" agregado al carrito`);
     clearTimeout(this.noticeTimer);
     this.noticeTimer = setTimeout(() => this.notice.set(null), 3000);

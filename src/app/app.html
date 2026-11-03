@@ -1,7 +1,7 @@
 <header class="topbar">
   <a class="brand" routerLink="/products">Tienda</a>
   <div class="topbar-actions">
-    <app-cart-badge [count]="0" variant="secondary" />
+    <app-cart-badge [count]="cartService.totalCount()" variant="secondary" />
   </div>
 </header>
 <main>
