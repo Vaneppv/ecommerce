@@ -95,6 +95,7 @@ src/
 │   │   └── infinite-scroll.ts
 │   ├── features/
 │   │   ├── cart/                  # Página del carrito
+│   │   ├── not-found/             # Página 404 para rutas inexistentes
 │   │   └── products/
 │   │       ├── catalog/           # Página del catálogo
 │   │       └── detail/            # Página de detalle
@@ -136,12 +137,13 @@ Reglas prácticas:
 
 ### 4.4 Rutas actuales
 
-| Ruta            | Componente      | Descripción                      |
-| --------------- | --------------- | -------------------------------- |
-| `/products`     | `Catalog`       | Catálogo con búsqueda y filtros. |
-| `/products/:id` | `ProductDetail` | Detalle de un producto.          |
-| `/cart`         | `Cart`          | Carrito y resumen del pedido.    |
-| `**`            | —               | Redirección a `/products`.       |
+| Ruta            | Componente      | Descripción                              |
+| --------------- | --------------- | ---------------------------------------- |
+| `/products`     | `Catalog`       | Catálogo con búsqueda y filtros.         |
+| `/products/:id` | `ProductDetail` | Detalle de un producto.                  |
+| `/cart`         | `Cart`          | Carrito y resumen del pedido.            |
+| `/not-found`    | `NotFound`      | Página de error 404 explícita.           |
+| `**`            | `NotFound`      | Página de error para rutas inexistentes. |
 
 Todas las páginas se cargan de forma perezosa. Si agregas una ruta nueva, sigue
 el mismo patrón de `loadComponent`.
