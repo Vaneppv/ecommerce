@@ -1,5 +1,5 @@
 import { Component, computed, inject, signal } from '@angular/core';
-import { finalize } from 'rxjs';
+import { finalize, Subscription } from 'rxjs';
 import { ProductGrid } from '../../../components/organisms/product-grid/product-grid';
 import { Product } from '../../../core/models/product.model';
 import { ProductService } from '../../../core/product-service';
@@ -18,6 +18,7 @@ export class Catalog {
   private readonly cartService = inject(CartService);
   private readonly pageSize = 20;
   private noticeTimer?: ReturnType<typeof setTimeout>;
+  private request?: Subscription;
 
   readonly products = signal<Product[]>([]);
   readonly total = signal(0);
@@ -51,7 +52,7 @@ export class Catalog {
     const category = this.selectedCategory();
     const search = this.searchTerm();
 
-    this.productService
+    this.request = this.productService
       .getPage(skip, this.pageSize, category, search)
       .pipe(finalize(() => this.loading.set(false)))
       .subscribe({
@@ -65,15 +66,13 @@ export class Catalog {
 
   setSearch(term: string) {
     this.searchTerm.set(term);
-    this.products.set([]);
-    this.total.set(0);
+    this.resetList();
     this.loadMore();
   }
 
   setCategory(category: string) {
     this.selectedCategory.set(category);
-    this.products.set([]);
-    this.total.set(0);
+    this.resetList();
     this.loadMore();
   }
 
@@ -82,5 +81,12 @@ export class Catalog {
     this.notice.set(`"${product.title}" agregado al carrito`);
     clearTimeout(this.noticeTimer);
     this.noticeTimer = setTimeout(() => this.notice.set(null), 3000);
+  }
+
+  private resetList() {
+    this.request?.unsubscribe();
+    this.loading.set(false);
+    this.products.set([]);
+    this.total.set(0);
   }
 }

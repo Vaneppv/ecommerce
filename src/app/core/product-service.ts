@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { delay, Observable, of } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { catchError, map } from 'rxjs/operators';
 import { Product, ProductPage } from './models/product.model';
 import { PRODUCTS } from './data/products.mock';
 
@@ -13,20 +13,31 @@ export class ProductService {
   constructor(private http: HttpClient) {}
 
   getPage(skip = 0, limit = 20, category = '', search = ''): Observable<ProductPage> {
-    const trimmedCategory = category.trim().toLowerCase();
-    const trimmedSearch = search.trim().toLowerCase();
+    const cat = category.trim().toLowerCase();
+    const term = search.trim().toLowerCase();
+    const hasCategory = cat !== '' && cat !== 'todas';
 
-    let url = `${this.apiUrl}?skip=${skip}&limit=${limit}`;
+    let request$: Observable<ProductPage>;
 
-    if (trimmedSearch) {
-      url = `${this.apiUrl}/search?q=${encodeURIComponent(trimmedSearch)}&skip=${skip}&limit=${limit}`;
-    } else if (trimmedCategory && trimmedCategory !== 'todas') {
-      url = `${this.apiUrl}/category/${encodeURIComponent(trimmedCategory)}?skip=${skip}&limit=${limit}`;
+    if (term && hasCategory) {
+      request$ = this.http
+        .get<ProductPage>(`${this.apiUrl}/category/${encodeURIComponent(cat)}?limit=0`)
+        .pipe(map((page) => this.paginate(page.products, term, skip, limit)));
+    } else if (term) {
+      request$ = this.http.get<ProductPage>(
+        `${this.apiUrl}/search?q=${encodeURIComponent(term)}&skip=${skip}&limit=${limit}`,
+      );
+    } else if (hasCategory) {
+      request$ = this.http.get<ProductPage>(
+        `${this.apiUrl}/category/${encodeURIComponent(cat)}?skip=${skip}&limit=${limit}`,
+      );
+    } else {
+      request$ = this.http.get<ProductPage>(`${this.apiUrl}?skip=${skip}&limit=${limit}`);
     }
 
-    return this.http.get<ProductPage>(url).pipe(
+    return request$.pipe(
       delay(this.latencyMs),
-      catchError(() => of(this.getFallbackPage(skip, limit, trimmedCategory, trimmedSearch))),
+      catchError(() => of(this.getFallbackPage(skip, limit, cat, term))),
     );
   }
 
@@ -42,6 +53,13 @@ export class ProductService {
       delay(this.latencyMs),
       catchError(() => of(this.getFallbackCategories())),
     );
+  }
+
+  private paginate(products: Product[], term: string, skip: number, limit: number): ProductPage {
+    const filtered = products.filter(
+      (p) => p.title.toLowerCase().includes(term) || p.description.toLowerCase().includes(term),
+    );
+    return { products: filtered.slice(skip, skip + limit), total: filtered.length, skip, limit };
   }
 
   private getFallbackPage(skip: number, limit: number, category = '', search = ''): ProductPage {
