@@ -1,9 +1,16 @@
+<a class="skip-link" href="#main" (click)="skipToContent($event)">Saltar al contenido</a>
 <header class="topbar">
   <a class="brand" routerLink="/products">Tienda</a>
-  <div class="topbar-actions">
+  <nav class="topbar-actions" aria-label="Cuenta y carrito">
+    @if (auth.user(); as user) {
+      <span class="user-name">Hola, {{ user.name }}</span>
+      <button type="button" class="topbar-link" (click)="logout()">Cerrar sesion</button>
+    } @else {
+      <a class="topbar-link" routerLink="/login">Iniciar sesion</a>
+    }
     <app-cart-badge [count]="cartService.totalCount()" variant="secondary" />
-  </div>
+  </nav>
 </header>
-<main>
+<main id="main" tabindex="-1">
   <router-outlet />
 </main>

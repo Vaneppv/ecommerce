@@ -62,3 +62,48 @@ main {
     padding-top: 2.5rem;
   }
 }
+
+.skip-link {
+  position: absolute;
+  top: 0.5rem;
+  left: -9999px;
+  z-index: 10;
+  padding: 0.5rem 1rem;
+  background: var(--color-surface);
+  color: var(--color-text);
+  border-radius: 6px;
+}
+
+.skip-link:focus {
+  left: 0.5rem;
+}
+
+main:focus {
+  outline: none;
+}
+
+.user-name {
+  font-size: 0.9rem;
+}
+
+.topbar-link {
+  padding: 0.25rem 0.5rem;
+  border: 0;
+  background: none;
+  color: var(--color-on-dark);
+  font-size: 0.9rem;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.topbar-link:focus-visible {
+  border-radius: 2px;
+  outline: 2px solid #c9a77c;
+  outline-offset: 3px;
+}
+
+@media (max-width: 480px) {
+  .user-name {
+    display: none;
+  }
+}
