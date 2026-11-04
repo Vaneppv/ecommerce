@@ -78,6 +78,7 @@ src/
 │   │   │   └── input/
 │   │   ├── molecules/             # Combinaciones de átomos
 │   │   │   ├── category-filter/
+│   │   │   ├── confirm-dialog/
 │   │   │   ├── product-card/
 │   │   │   └── search-form/
 │   │   └── organisms/             # Secciones complejas
@@ -94,6 +95,8 @@ src/
 │   ├── directives/
 │   │   └── infinite-scroll.ts
 │   ├── features/
+│   │   ├── auth/
+│   │   │   └── login/             # Página de inicio de sesión
 │   │   ├── cart/                  # Página del carrito
 │   │   ├── not-found/             # Página 404 para rutas inexistentes
 │   │   └── products/
@@ -142,6 +145,7 @@ Reglas prácticas:
 | `/products`     | `Catalog`       | Catálogo con búsqueda y filtros.         |
 | `/products/:id` | `ProductDetail` | Detalle de un producto.                  |
 | `/cart`         | `Cart`          | Carrito y resumen del pedido.            |
+| `/login`        | `Login`         | Inicio de sesión de usuarios.            |
 | `/not-found`    | `NotFound`      | Página de error 404 explícita.           |
 | `**`            | `NotFound`      | Página de error para rutas inexistentes. |
 

@@ -1,0 +1,86 @@
+.dialog-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(47, 36, 29, 0.45);
+  backdrop-filter: blur(2px);
+  z-index: 1000;
+  animation: fadeIn 0.15s ease-out;
+}
+
+.dialog-card {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: calc(100% - 2rem);
+  max-width: 440px;
+  background: var(--color-surface, #fffdf9);
+  border: 1px solid var(--color-border, #e7ddd0);
+  border-radius: 16px;
+  padding: 2rem 1.75rem;
+  text-align: center;
+  box-shadow: 0 12px 35px rgba(47, 36, 29, 0.15);
+  z-index: 1001;
+  animation: popIn 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.dialog-icon-wrapper {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: #fff5e6;
+  color: var(--color-accent, #8b5a2b);
+  margin-bottom: 1rem;
+}
+
+.dialog-title {
+  font-size: 1.35rem;
+  color: var(--color-text, #2f241d);
+  margin-bottom: 0.5rem;
+  line-height: 1.25;
+}
+
+.dialog-message {
+  font-size: 0.9375rem;
+  color: var(--color-muted, #7a6a5c);
+  line-height: 1.55;
+  margin: 0 0 1.75rem;
+}
+
+.dialog-actions {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: center;
+}
+
+.dialog-actions app-button {
+  flex: 1;
+}
+
+.dialog-actions app-button ::ng-deep button {
+  width: 100%;
+  justify-content: center;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes popIn {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -46%) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}

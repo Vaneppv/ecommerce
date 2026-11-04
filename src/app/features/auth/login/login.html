@@ -1,46 +1,110 @@
-<section class="form-card">
-  <h1>Iniciar sesión</h1>
-  <p class="form-hint">
-    Cuenta de prueba: <strong>demo@tienda.com</strong> / <strong>demo1234</strong>
-  </p>
-
-  @if (loginError(); as message) {
-    <p class="form-error-banner" role="alert">{{ message }}</p>
-  }
-
-  <form [formGroup]="form" (ngSubmit)="submit()" novalidate>
-    @let emailError = errorMessage(form.controls.email);
-    <div class="form-field">
-      <label for="email">Correo electrónico</label>
-      <input
-        id="email"
-        type="email"
-        formControlName="email"
-        autocomplete="email"
-        [attr.aria-invalid]="emailError ? 'true' : null"
-        [attr.aria-describedby]="emailError ? 'email-error' : null"
-      />
-      @if (emailError) {
-        <p id="email-error" class="form-error">{{ emailError }}</p>
-      }
+<section class="login-container" aria-labelledby="login-title">
+  <div class="login-card">
+    <div class="login-header">
+      <div class="icon-badge" aria-hidden="true">
+        <tabler-icon icon="lock" [size]="30" />
+      </div>
+      <h1 id="login-title" class="title">Iniciar sesión</h1>
+      <p class="subtitle">Ingresa tus credenciales para acceder a tu cuenta.</p>
     </div>
 
-    @let passwordError = errorMessage(form.controls.password);
-    <div class="form-field">
-      <label for="password">Contraseña</label>
-      <input
-        id="password"
-        type="password"
-        formControlName="password"
-        autocomplete="current-password"
-        [attr.aria-invalid]="passwordError ? 'true' : null"
-        [attr.aria-describedby]="passwordError ? 'password-error' : null"
-      />
-      @if (passwordError) {
-        <p id="password-error" class="form-error">{{ passwordError }}</p>
-      }
+    <!-- Acceso de prueba elegante sin botón -->
+    <div class="demo-card" aria-label="Credenciales de prueba">
+      <div class="demo-header">
+        <tabler-icon icon="info-circle" [size]="16" class="demo-icon" aria-hidden="true" />
+        <span class="demo-title">Acceso de prueba</span>
+      </div>
+      <div class="demo-body">
+        <div class="demo-item">
+          <span class="demo-label">Correo:</span>
+          <code class="demo-code">demo&#64;tienda.com</code>
+        </div>
+        <div class="demo-item">
+          <span class="demo-label">Contraseña:</span>
+          <code class="demo-code">demo1234</code>
+        </div>
+      </div>
     </div>
 
-    <app-button type="submit" size="large">Entrar</app-button>
-  </form>
+    <!-- Alerta de error -->
+    @if (loginError(); as message) {
+      <div class="error-banner-wrapper">
+        <app-alert
+          type="error"
+          [message]="message"
+          [closable]="true"
+          (onClose)="loginError.set(null)"
+        />
+      </div>
+    }
+
+    <form [formGroup]="form" (ngSubmit)="submit()" novalidate class="login-form">
+      <!-- Campo Email -->
+      @let emailCtrl = form.controls.email;
+      @let emailErr = errorMessage(emailCtrl);
+      <div class="form-group" [class.has-error]="emailErr">
+        <label for="email" class="form-label">Correo electrónico</label>
+        <div class="input-wrapper">
+          <tabler-icon icon="mail" [size]="18" class="input-icon" aria-hidden="true" />
+          <input
+            id="email"
+            type="email"
+            formControlName="email"
+            autocomplete="email"
+            placeholder="ejemplo@correo.com"
+            class="form-input"
+            [attr.aria-invalid]="emailErr ? 'true' : null"
+            [attr.aria-describedby]="emailErr ? 'email-error' : null"
+          />
+        </div>
+        @if (emailErr) {
+          <p id="email-error" class="form-error" role="alert">{{ emailErr }}</p>
+        }
+      </div>
+
+      <!-- Campo Password -->
+      @let passwordCtrl = form.controls.password;
+      @let passErr = errorMessage(passwordCtrl);
+      <div class="form-group" [class.has-error]="passErr">
+        <label for="password" class="form-label">Contraseña</label>
+        <div class="input-wrapper">
+          <tabler-icon icon="lock" [size]="18" class="input-icon" aria-hidden="true" />
+          <input
+            id="password"
+            [type]="showPassword() ? 'text' : 'password'"
+            formControlName="password"
+            autocomplete="current-password"
+            placeholder="Mínimo 6 caracteres"
+            class="form-input"
+            [attr.aria-invalid]="passErr ? 'true' : null"
+            [attr.aria-describedby]="passErr ? 'password-error' : null"
+          />
+          <button
+            type="button"
+            class="toggle-password-btn"
+            (click)="togglePasswordVisibility()"
+            [attr.aria-label]="showPassword() ? 'Ocultar contraseña' : 'Ver contraseña'"
+          >
+            <tabler-icon [icon]="showPassword() ? 'eye-off' : 'eye'" [size]="18" />
+          </button>
+        </div>
+        @if (passErr) {
+          <p id="password-error" class="form-error" role="alert">{{ passErr }}</p>
+        }
+      </div>
+
+      <div class="form-actions">
+        <app-button type="submit" size="large" variant="primary" class="submit-btn">
+          <span>Ingresar a mi cuenta</span>
+        </app-button>
+      </div>
+    </form>
+
+    <div class="login-footer">
+      <a routerLink="/products" class="back-link">
+        <tabler-icon icon="arrow-left" [size]="16" />
+        <span>Volver a la tienda</span>
+      </a>
+    </div>
+  </div>
 </section>

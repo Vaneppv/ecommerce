@@ -1,0 +1,225 @@
+.login-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: calc(100vh - 220px);
+  padding: 1.5rem 1rem;
+}
+
+.login-card {
+  width: 100%;
+  max-width: 440px;
+  background: var(--color-surface, #fffdf9);
+  border: 1px solid var(--color-border, #e7ddd0);
+  border-radius: 16px;
+  padding: 2.5rem 2rem;
+  box-shadow: 0 4px 20px rgba(47, 36, 29, 0.05);
+}
+
+.login-header {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.icon-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: #fff5e6;
+  color: var(--color-accent, #8b5a2b);
+  margin-bottom: 1rem;
+}
+
+.title {
+  font-size: 1.75rem;
+  color: var(--color-text, #2f241d);
+  margin-bottom: 0.35rem;
+  line-height: 1.2;
+}
+
+.subtitle {
+  color: var(--color-muted, #7a6a5c);
+  font-size: 0.9375rem;
+  margin: 0;
+}
+
+/* Tarjeta elegante de datos de prueba */
+.demo-card {
+  background: #fdf8f2;
+  border: 1px solid #e8dbcc;
+  border-radius: 10px;
+  padding: 0.875rem 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.demo-header {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin-bottom: 0.5rem;
+  color: var(--color-accent-strong, #5c3a21);
+}
+
+.demo-icon {
+  color: var(--color-accent, #8b5a2b);
+}
+
+.demo-title {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.demo-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.demo-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.8125rem;
+}
+
+.demo-label {
+  color: var(--color-muted, #7a6a5c);
+}
+
+.demo-code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  background: #fff;
+  padding: 0.15rem 0.45rem;
+  border-radius: 4px;
+  border: 1px solid #ebdccf;
+  color: var(--color-text, #2f241d);
+  font-size: 0.8125rem;
+}
+
+.error-banner-wrapper {
+  margin-bottom: 1rem;
+}
+
+/* Formularios y campos */
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+}
+
+.form-label {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--color-text, #2f241d);
+}
+
+.input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.input-icon {
+  position: absolute;
+  left: 0.875rem;
+  color: var(--color-muted, #7a6a5c);
+  pointer-events: none;
+}
+
+.form-input {
+  width: 100%;
+  padding: 0.75rem 0.875rem 0.75rem 2.5rem;
+  border: 1px solid var(--color-border, #e7ddd0);
+  border-radius: 8px;
+  background: #fff;
+  color: var(--color-text, #2f241d);
+  font-size: 0.9375rem;
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: var(--color-accent, #8b5a2b);
+  box-shadow: 0 0 0 3px rgba(139, 90, 43, 0.15);
+}
+
+.has-error .form-input {
+  border-color: #dc2626;
+}
+
+.has-error .form-input:focus {
+  box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.15);
+}
+
+.toggle-password-btn {
+  position: absolute;
+  right: 0.75rem;
+  background: none;
+  border: none;
+  color: var(--color-muted, #7a6a5c);
+  cursor: pointer;
+  padding: 0.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+}
+
+.toggle-password-btn:hover {
+  color: var(--color-text, #2f241d);
+}
+
+.form-error {
+  color: #dc2626;
+  font-size: 0.75rem;
+  margin: 0.125rem 0 0;
+}
+
+.form-actions {
+  margin-top: 0.5rem;
+}
+
+.submit-btn {
+  display: block;
+  width: 100%;
+}
+
+.submit-btn ::ng-deep button {
+  width: 100%;
+  justify-content: center;
+}
+
+.login-footer {
+  margin-top: 2rem;
+  text-align: center;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--color-border, #e7ddd0);
+}
+
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--color-muted, #7a6a5c);
+  font-size: 0.875rem;
+  font-weight: 500;
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+
+.back-link:hover {
+  color: var(--color-accent, #8b5a2b);
+}

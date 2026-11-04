@@ -53,6 +53,13 @@ main {
   gap: 1rem;
 }
 
+.top-notification-container {
+  width: 100%;
+  max-width: var(--page-max-width);
+  margin: 1.25rem auto 0;
+  padding: 0 var(--page-gutter);
+}
+
 @media (min-width: 768px) {
   :host {
     --page-gutter: 2rem;
