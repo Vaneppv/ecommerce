@@ -1,13 +1,23 @@
 <button
   [type]="type()"
   [disabled]="disabled() || loading()"
-  [class]="'btn ' + variant() + ' ' + size()"
-  (click)="onClick.emit()"
+  [class]="'btn ' + variant() + ' ' + size() + (showSuccess() ? ' is-success' : '')"
+  [attr.aria-busy]="loading() ? 'true' : null"
+  (click)="handleClick()"
 >
-  @if (loading()) {
-    <span class="spinner" role="status" aria-hidden="true"></span>
-    <span>Cargando...</span>
-  } @else {
+  <span class="btn-content" [class.is-hidden]="loading() || showSuccess()">
     <ng-content></ng-content>
+  </span>
+
+  @if (loading()) {
+    <span class="btn-feedback">
+      <span class="spinner" aria-hidden="true"></span>
+      <span>{{ loadingText() }}</span>
+    </span>
+  } @else if (showSuccess()) {
+    <span class="btn-feedback">
+      <span class="check" aria-hidden="true"></span>
+      <span>{{ successText() }}</span>
+    </span>
   }
 </button>

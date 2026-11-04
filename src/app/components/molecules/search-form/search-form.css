@@ -41,7 +41,3 @@
   background-color: #efe7dc;
   color: var(--color-text);
 }
-
-app-button span {
-  margin-left: 0.25rem;
-}

@@ -84,17 +84,23 @@ describe('ProductDetail', () => {
     expect(component.quantity()).toBe(1); // Mínimo 1
   });
 
-  it('muestra aviso y añade el producto con su cantidad al CartService', () => {
+  it('muestra aviso, agrega el producto y muestra feedback en el botón', () => {
     const cartService = TestBed.inject(CartService);
     cartService.clearCart();
 
     component.incrementQuantity();
-    component.addToCart();
+    fixture.detectChanges();
+
+    const button = fixture.nativeElement.querySelector('app-button button') as HTMLButtonElement;
+    button.click();
+    fixture.detectChanges();
 
     expect(component.notice()).toContain('Producto de Prueba');
     expect(cartService.totalCount()).toBe(2);
     expect(cartService.items()[0].quantity).toBe(2);
     expect(cartService.items()[0].product.id).toBe(mockProduct.id);
+    expect(button.classList.contains('is-success')).toBe(true);
+    expect(button.querySelector('.btn-feedback')?.textContent).toContain('Agregado');
   });
 
   it('muestra mensaje de error cuando el producto no se encuentra', () => {

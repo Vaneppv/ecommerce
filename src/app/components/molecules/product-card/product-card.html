@@ -19,6 +19,8 @@
       <app-button
         variant="primary"
         size="small"
+        [successFeedback]="true"
+        successText="Agregado"
         (onClick)="onAddToCart.emit()"
         [disabled]="isOutOfStock()"
       >
