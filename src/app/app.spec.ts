@@ -1,12 +1,33 @@
 import { TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
+import {
+  IconCategory,
+  IconChevronLeft,
+  IconChevronRight,
+  IconHome,
+  IconLayoutGrid,
+  IconShoppingCart,
+  IconUser,
+  provideTablerIcons,
+} from '@tabler/icons-angular';
 import { App } from './app';
 
 describe('App', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [App],
-      providers: [provideRouter([])],
+      providers: [
+        provideRouter([]),
+        provideTablerIcons({
+          IconCategory,
+          IconChevronLeft,
+          IconChevronRight,
+          IconHome,
+          IconLayoutGrid,
+          IconShoppingCart,
+          IconUser,
+        }),
+      ],
     }).compileComponents();
   });
 

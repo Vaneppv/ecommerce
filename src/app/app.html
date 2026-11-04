@@ -1,6 +1,43 @@
-<header class="topbar">
-  <a class="brand" routerLink="/products">Tienda</a>
+<header class="site-header">
+  <div class="topbar">
+    <a class="brand" routerLink="/" aria-label="Ir al inicio">Tienda</a>
+
+    <div class="topbar-search">
+      <app-search-form
+        placeholder="Buscar productos..."
+        buttonVariant="secondary"
+        (onSearch)="onSearch($event)"
+      />
+    </div>
+
+    <div class="topbar-actions">
+      <button type="button" class="icon-action" title="Iniciar sesión (próximamente)">
+        <tabler-icon icon="user" [size]="20" />
+        <span>Ingresar</span>
+      </button>
+      <button type="button" class="icon-action icon-action-cart" title="Carrito (próximamente)">
+        <tabler-icon icon="shopping-cart" [size]="20" />
+        <span>Carrito</span>
+      </button>
+    </div>
+  </div>
+
+  <nav class="main-nav" aria-label="Navegación principal">
+    <a routerLink="/" routerLinkActive="is-active" [routerLinkActiveOptions]="{ exact: true }">
+      <tabler-icon icon="home" [size]="18" />
+      <span>Inicio</span>
+    </a>
+    <a routerLink="/products" routerLinkActive="is-active">
+      <tabler-icon icon="layout-grid" [size]="18" />
+      <span>Productos</span>
+    </a>
+    <a routerLink="/" fragment="categorias">
+      <tabler-icon icon="category" [size]="18" />
+      <span>Categorías</span>
+    </a>
+  </nav>
 </header>
+
 <main>
   <router-outlet />
 </main>
