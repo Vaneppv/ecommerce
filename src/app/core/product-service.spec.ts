@@ -93,6 +93,19 @@ describe('ProductService', () => {
     expect(page.total).toBe(PRODUCTS.filter((p) => p.category.toLowerCase() === 'ropa').length);
   });
 
+  it('obtiene los productos populares ordenados por rating', async () => {
+    const response = firstValueFrom(service.getPopular(6));
+
+    const req = httpMock.expectOne(`${API_URL}?limit=6&sortBy=rating&order=desc`);
+    req.flush(
+      pageOf([...PRODUCTS].sort((a, b) => b.rating - a.rating).slice(0, 6), 0, 6),
+    );
+
+    const products = await response;
+    expect(products.length).toBe(6);
+    expect(products[0].rating).toBeGreaterThanOrEqual(products[1].rating);
+  });
+
   it('obtiene un producto por su id', async () => {
     const response = firstValueFrom(service.getProductById(1));
 

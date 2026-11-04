@@ -41,6 +41,16 @@ export class ProductService {
     );
   }
 
+  getPopular(limit = 6): Observable<Product[]> {
+    return this.http
+      .get<ProductPage>(`${this.apiUrl}?limit=${limit}&sortBy=rating&order=desc`)
+      .pipe(
+        delay(this.latencyMs),
+        map((page) => page.products),
+        catchError(() => of(this.getFallbackPopular(limit))),
+      );
+  }
+
   getProductById(id: number): Observable<Product | null> {
     return this.http.get<Product>(`${this.apiUrl}/${id}`).pipe(
       delay(this.latencyMs),
@@ -59,7 +69,13 @@ export class ProductService {
     const filtered = products.filter(
       (p) => p.title.toLowerCase().includes(term) || p.description.toLowerCase().includes(term),
     );
-    return { products: filtered.slice(skip, skip + limit), total: filtered.length, skip, limit };
+
+    return {
+      products: filtered.slice(skip, skip + limit),
+      total: filtered.length,
+      skip,
+      limit,
+    };
   }
 
   private getFallbackPage(skip: number, limit: number, category = '', search = ''): ProductPage {
@@ -87,12 +103,15 @@ export class ProductService {
     };
   }
 
+  private getFallbackPopular(limit: number): Product[] {
+    return [...PRODUCTS].sort((a, b) => b.rating - a.rating).slice(0, Math.max(0, limit));
+  }
+
   private getFallbackProductById(id: number): Product | null {
     return PRODUCTS.find((p) => p.id === id) ?? null;
   }
 
   private getFallbackCategories(): string[] {
-    const categories = new Set(PRODUCTS.map((p) => p.category));
-    return Array.from(categories);
+    return Array.from(new Set(PRODUCTS.map((p) => p.category)));
   }
 }

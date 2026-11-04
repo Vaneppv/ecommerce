@@ -1,6 +1,17 @@
 import { TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
-import { IconShoppingCart, provideTablerIcons } from '@tabler/icons-angular';
+import {
+  IconCategory,
+  IconChevronLeft,
+  IconChevronRight,
+  IconHome,
+  IconLayoutGrid,
+  IconSearch,
+  IconShoppingCart,
+  IconUser,
+  IconX,
+  provideTablerIcons,
+} from '@tabler/icons-angular';
 import { App } from './app';
 import { CartService } from './core/cart.service';
 
@@ -11,7 +22,20 @@ describe('App', () => {
     localStorage.clear();
     await TestBed.configureTestingModule({
       imports: [App],
-      providers: [provideRouter([]), provideTablerIcons({ IconShoppingCart })],
+      providers: [
+        provideRouter([]),
+        provideTablerIcons({
+          IconCategory,
+          IconChevronLeft,
+          IconChevronRight,
+          IconHome,
+          IconLayoutGrid,
+          IconSearch,
+          IconShoppingCart,
+          IconUser,
+          IconX,
+        }),
+      ],
     }).compileComponents();
 
     cartService = TestBed.inject(CartService);

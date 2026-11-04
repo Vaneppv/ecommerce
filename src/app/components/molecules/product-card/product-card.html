@@ -1,16 +1,19 @@
-<div class="product-card">
-  <a [routerLink]="['/products', productId()]" class="product-card-image-link">
+<article class="product-card">
+  <a class="product-card-media" [routerLink]="['/products', productId()]">
     <app-image
       [src]="productImage()"
       [alt]="productTitle()"
       [loading]="isFetching()"
       (onLoad)="onImageLoad.emit()"
       (onError)="onImageError.emit($event)"
-    ></app-image>
+    />
+    @if (productCategory()) {
+      <span class="product-category">{{ productCategory() | titlecase }}</span>
+    }
   </a>
 
   <div class="product-card-content">
-    <a [routerLink]="['/products', productId()]" class="product-title-link">
+    <a class="product-title-link" [routerLink]="['/products', productId()]">
       <h3 class="product-title">{{ productTitle() | titlecase }}</h3>
     </a>
     <p class="product-price">{{ productPrice() | currency }}</p>
@@ -31,8 +34,8 @@
         title="Ver detalles"
         aria-label="Ver detalles"
       >
-        <tabler-icon icon="eye" [size]="14"></tabler-icon>
+        <tabler-icon icon="eye" [size]="16"></tabler-icon>
       </a>
     </div>
   </div>
-</div>
+</article>

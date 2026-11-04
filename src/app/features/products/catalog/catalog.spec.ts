@@ -1,4 +1,5 @@
 import { TestBed } from '@angular/core/testing';
+import { provideRouter } from '@angular/router';
 import { of, throwError } from 'rxjs';
 import { Product } from '../../../core/models/product.model';
 import { ProductService } from '../../../core/product-service';
@@ -11,34 +12,30 @@ const item = (id: number): Product => ({
   description: `Descripción del producto ${id}`,
   category: 'hogar',
   price: 10,
-  rating: 4,
-  thumbnail: `https://example.com/${id}.webp`,
   discountPercentage: 0,
+  rating: 4,
   stock: 10,
   tags: ['hogar'],
-  brand: 'Brand',
+  brand: 'Marca',
   sku: `SKU-${id}`,
   weight: 1,
-  dimensions: { width: 10, height: 10, depth: 10 },
-  warrantyInformation: '1 month warranty',
-  shippingInformation: 'Ships in 1 month',
+  dimensions: { width: 1, height: 1, depth: 1 },
+  warrantyInformation: '',
+  shippingInformation: '',
   availabilityStatus: 'In Stock',
   reviews: [],
-  returnPolicy: '30 days return policy',
+  returnPolicy: '',
   minimumOrderQuantity: 1,
-  meta: {
-    createdAt: '2024-05-23T08:56:21.618Z',
-    updatedAt: '2024-05-23T08:56:21.618Z',
-    barcode: '1234567890',
-    qrCode: 'qr',
-  },
-  images: [`https://example.com/${id}.webp`],
+  meta: { createdAt: '', updatedAt: '', barcode: '', qrCode: '' },
+  thumbnail: `https://example.com/${id}.webp`,
+  images: [],
 });
 
 function setup(getPage: ProductService['getPage']) {
   TestBed.configureTestingModule({
     imports: [Catalog],
     providers: [
+      provideRouter([]),
       {
         provide: ProductService,
         useValue: {

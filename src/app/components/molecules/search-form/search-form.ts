@@ -13,6 +13,7 @@ import { Input } from '../../atoms/input/input';
 export class SearchForm {
   searchTerm = input<string>('');
   placeholder = input<string>('Buscar productos...');
+  buttonVariant = input<'primary' | 'secondary' | 'ghost'>('primary');
 
   onSearch = output<string>();
 
@@ -22,8 +23,8 @@ export class SearchForm {
     this.localTerm.set(this.searchTerm());
   }
 
-  handleInputChange(val: string) {
-    this.localTerm.set(val);
+  handleInputChange(value: string) {
+    this.localTerm.set(value);
   }
 
   handleKeyDown(event: KeyboardEvent) {

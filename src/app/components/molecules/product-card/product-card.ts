@@ -17,6 +17,7 @@ export class ProductCard {
   productImage = input<string>('');
   productTitle = input<string>('');
   productPrice = input<string | number>('');
+  productCategory = input<string>('');
   isFetching = input<boolean>(false);
   isOutOfStock = input<boolean>(false);
 

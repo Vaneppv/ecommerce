@@ -1,4 +1,5 @@
 import { Component, computed, inject, signal } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { finalize, Subscription } from 'rxjs';
 import { ProductGrid } from '../../../components/organisms/product-grid/product-grid';
 import { Product } from '../../../core/models/product.model';
@@ -16,6 +17,7 @@ import { SearchForm } from '../../../components/molecules/search-form/search-for
 export class Catalog {
   private readonly productService = inject(ProductService);
   private readonly cartService = inject(CartService);
+  private readonly route = inject(ActivatedRoute, { optional: true });
   private readonly pageSize = 20;
   private noticeTimer?: ReturnType<typeof setTimeout>;
   private request?: Subscription;
@@ -33,12 +35,33 @@ export class Catalog {
 
   constructor() {
     this.loadCategories();
-    this.loadMore();
+
+    if (this.route) {
+      this.route.queryParamMap.subscribe((params) => {
+        const search = params.get('q') ?? '';
+        const category = params.get('category') || 'todas';
+
+        if (
+          search === this.searchTerm() &&
+          category === this.selectedCategory() &&
+          this.products().length > 0
+        ) {
+          return;
+        }
+
+        this.searchTerm.set(search);
+        this.selectedCategory.set(category);
+        this.resetList();
+        this.loadMore();
+      });
+    } else {
+      this.loadMore();
+    }
   }
 
   loadCategories() {
     this.productService.getCategories().subscribe({
-      next: (cats) => this.categories.set(cats),
+      next: (categories) => this.categories.set(categories),
     });
   }
 
@@ -71,9 +94,13 @@ export class Catalog {
   }
 
   setCategory(category: string) {
-    this.selectedCategory.set(category);
+    this.selectedCategory.set(category || 'todas');
     this.resetList();
     this.loadMore();
+  }
+
+  clearCategory() {
+    this.setCategory('todas');
   }
 
   addToCart(product: Product) {

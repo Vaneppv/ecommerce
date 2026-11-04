@@ -5,16 +5,16 @@
       [value]="localTerm()"
       [placeholder]="placeholder()"
       (onInput)="handleInputChange($event)"
-    ></app-input>
+    />
     @if (localTerm()) {
       <button type="button" class="clear-btn" (click)="clearSearch()" aria-label="Limpiar búsqueda">
-        <tabler-icon icon="x" [size]="16"></tabler-icon>
+        <tabler-icon icon="x" [size]="16" />
       </button>
     }
   </div>
 
-  <app-button variant="primary" size="medium" type="submit" (onClick)="submitSearch()">
-    <tabler-icon icon="search" [size]="16"></tabler-icon>
+  <app-button [variant]="buttonVariant()" size="small" type="submit" (onClick)="submitSearch()">
+    <tabler-icon icon="search" [size]="16" />
     <span>Buscar</span>
   </app-button>
 </form>

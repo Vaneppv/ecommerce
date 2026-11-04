@@ -1,11 +1,13 @@
 import { Component, inject } from '@angular/core';
-import { Router, RouterLink, RouterOutlet } from '@angular/router';
+import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { TablerIconComponent } from '@tabler/icons-angular';
 import { CartBadge } from './components/atoms/cart-badge/cart-badge';
+import { SearchForm } from './components/molecules/search-form/search-form';
 import { AuthService } from './core/auth.service';
 import { CartService } from './core/cart.service';
 
 @Component({
-  imports: [RouterOutlet, RouterLink, CartBadge],
+  imports: [RouterOutlet, RouterLink, RouterLinkActive, CartBadge, TablerIconComponent, SearchForm],
   selector: 'app-root',
   styleUrl: './app.css',
   templateUrl: './app.html',
@@ -24,5 +26,9 @@ export class App {
   skipToContent(event: Event) {
     event.preventDefault();
     document.getElementById('main')?.focus();
+  }
+
+  onSearch(term: string) {
+    this.router.navigate(['/products'], { queryParams: term ? { q: term } : {} });
   }
 }

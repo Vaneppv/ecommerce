@@ -1,6 +1,6 @@
 <header class="catalog-header">
   <p class="eyebrow">Tienda</p>
-  <h1>Catálogo de Productos</h1>
+  <h1>Productos</h1>
   <p class="catalog-subtitle">Encuentra productos para tu día a día.</p>
 </header>
 
@@ -10,6 +10,7 @@
 
 <section class="catalog-controls" aria-label="Buscar y filtrar productos">
   <app-search-form
+    [searchTerm]="searchTerm()"
     placeholder="Buscar por nombre o descripción..."
     (onSearch)="setSearch($event)"
   />

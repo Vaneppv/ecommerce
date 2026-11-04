@@ -6,6 +6,8 @@
         [productImage]="p.thumbnail"
         [productTitle]="p.title"
         [productPrice]="p.price"
+        [productCategory]="p.category"
+        [isFetching]="true"
         (onAddToCart)="onAdd.emit(p)"
       />
     </li>
