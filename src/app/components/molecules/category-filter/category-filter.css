@@ -1,31 +1,41 @@
+:host {
+  display: block;
+}
+
 .category-filter {
   display: flex;
+  flex-wrap: wrap;
   gap: 0.5rem;
-  margin-bottom: 1rem;
 }
 
-.category-filter button {
-  background: #c9964a;
-  color: #3d2a1f;
-  padding: 0.5rem 1rem;
-  border-radius: 20px;
-  border: none;
-  font-size: 0.875rem;
+.chip {
+  flex-shrink: 0;
+  padding: 0.4rem 0.9rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-pill);
+  background: var(--color-surface);
+  color: var(--color-accent-strong);
+  font: inherit;
+  font-size: 0.8rem;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
+    color 0.2s ease;
 }
 
-.category-filter button:hover:not(.selected) {
-  background: #a0522b;
-  color: #fdf6e3;
+.chip:hover {
+  border-color: var(--color-accent);
+  background: var(--color-surface-soft);
 }
 
-.category-filter button.selected {
-  background: #8b5a2b;
-  color: #fdf6e3;
+.chip.selected {
+  border-color: var(--color-accent);
+  background: var(--color-accent);
+  color: var(--color-on-dark);
 }
 
-.category-filter button:focus-visible {
-  outline: 2px solid #d2b48c;
+.chip:focus-visible {
+  outline: 2px solid var(--color-accent);
   outline-offset: 2px;
 }

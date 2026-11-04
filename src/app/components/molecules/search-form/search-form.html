@@ -1,15 +1,11 @@
-<div class="search-form">
+<div class="search-form" role="search">
   <app-input
-    type="text"
-    placeholder="Buscar productos..."
-    (onInput)="onSearch.emit($event)"
-  ></app-input>
+    type="search"
+    [placeholder]="placeholder()"
+    [value]="localTerm()"
+    (onInput)="handleInput($event)"
+    (keydown)="handleKeyDown($event)"
+  />
 
-  <app-button
-    variant="primary"
-    size="small"
-    (click)="performSearch.emit()"
-  >
-    Buscar
-  </app-button>
+  <app-button [variant]="buttonVariant()" size="small" (onClick)="submit()">Buscar</app-button>
 </div>

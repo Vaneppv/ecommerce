@@ -1,16 +1,19 @@
 import { Component, input, output } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { Button } from '../../atoms/button/button';
+import { TitleCasePipe } from '@angular/common';
 
 @Component({
   standalone: true,
-  imports: [CommonModule, Button],
+  imports: [TitleCasePipe],
   selector: 'app-category-filter',
   styleUrl: './category-filter.css',
-  templateUrl: './category-filter.html'
+  templateUrl: './category-filter.html',
 })
 export class CategoryFilter {
-  categories = input<string[]>(['belleza', 'electrónica', 'hogar', 'ropa', 'deportes']);
+  categories = input<string[]>([]);
   filteredCategories = input<string[]>([]);
   onCategoryChange = output<string>();
+
+  isAllSelected(): boolean {
+    return this.filteredCategories().length === 0;
+  }
 }

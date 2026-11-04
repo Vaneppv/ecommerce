@@ -2,9 +2,11 @@
   @for (p of products(); track p.id) {
     <li>
       <app-product-card
+        [productId]="p.id"
         [productImage]="p.thumbnail"
         [productTitle]="p.title"
-        [productPrice]="p.price.toString()"
+        [productPrice]="p.price"
+        [productCategory]="p.category"
         [isFetching]="true"
         (onAddToCart)="onAdd.emit(p)"
       />
