@@ -1,4 +1,5 @@
 import { TestBed } from '@angular/core/testing';
+import { provideRouter } from '@angular/router';
 import { of, throwError } from 'rxjs';
 import { Product } from '../../../core/models/product';
 import { ProductService } from '../../../core/product-service';
@@ -10,32 +11,49 @@ const item = (id: number): Product => ({
   description: '',
   category: 'hogar',
   price: 10,
+  discountPercentage: 0,
   rating: 4,
+  stock: 10,
+  tags: ['hogar'],
+  brand: 'Marca',
+  sku: `SKU-${id}`,
+  weight: 1,
+  dimensions: { width: 1, height: 1, depth: 1 },
+  warrantyInformation: '',
+  shippingInformation: '',
+  availabilityStatus: 'In Stock',
+  reviews: [],
+  returnPolicy: '',
+  minimumOrderQuantity: 1,
+  meta: { createdAt: '', updatedAt: '', barcode: '', qrCode: '' },
   thumbnail: `https://example.com/${id}.webp`,
+  images: [],
 });
 
 function setup(getPage: ProductService['getPage']) {
   TestBed.configureTestingModule({
     imports: [Catalog],
-    providers: [{ provide: ProductService, useValue: { getPage } }],
+    providers: [
+      provideRouter([]),
+      {
+        provide: ProductService,
+        useValue: { getPage, getCategories: () => of(['hogar', 'ropa']) },
+      },
+    ],
   });
   return TestBed.createComponent(Catalog).componentInstance;
 }
 
 describe('Catalog', () => {
   it('carga la primera página al crearse', () => {
-    const catalog = setup(() =>
-      of({ products: [item(1), item(2)], total: 4, skip: 0, limit: 20 }),
-    );
+    const catalog = setup(() => of({ products: [item(1), item(2)], total: 4, skip: 0, limit: 20 }));
     expect(catalog.products().length).toBe(2);
     expect(catalog.hasMore()).toBe(true);
     expect(catalog.loading()).toBe(false);
   });
 
   it('indica que no hay más cuando se cargó todo', () => {
-    const catalog = setup(() =>
-      of({ products: [item(1), item(2)], total: 2, skip: 0, limit: 20 }),
-    );
+    const catalog = setup(() => of({ products: [item(1), item(2)], total: 2, skip: 0, limit: 20 }));
     expect(catalog.hasMore()).toBe(false);
   });
 

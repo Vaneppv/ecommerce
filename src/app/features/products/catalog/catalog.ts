@@ -1,4 +1,5 @@
 import { Component, computed, inject, signal } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { finalize } from 'rxjs';
 import { ProductGrid } from '../../../components/organisms/product-grid/product-grid';
 import { Product } from '../../../core/models/product';
@@ -14,6 +15,7 @@ import { SearchForm } from '../../../components/molecules/search-form/search-for
 })
 export class Catalog {
   private readonly productService = inject(ProductService);
+  private readonly route = inject(ActivatedRoute, { optional: true });
   private readonly pageSize = 20;
   private noticeTimer?: ReturnType<typeof setTimeout>;
 
@@ -24,11 +26,40 @@ export class Catalog {
   readonly notice = signal<string | null>(null);
   readonly hasMore = computed(() => this.products().length < this.total());
 
+  readonly categories = signal<string[]>([]);
   readonly searchTerm = signal('');
   readonly selectedCategory = signal('');
 
   constructor() {
-    this.loadMore();
+    this.loadCategories();
+
+    if (this.route) {
+      this.route.queryParamMap.subscribe((params) => {
+        const search = params.get('q') ?? '';
+        const category = params.get('category') ?? '';
+
+        if (
+          search === this.searchTerm() &&
+          category === this.selectedCategory() &&
+          this.products().length > 0
+        ) {
+          return;
+        }
+
+        this.searchTerm.set(search);
+        this.selectedCategory.set(category);
+        this.resetList();
+        this.loadMore();
+      });
+    } else {
+      this.loadMore();
+    }
+  }
+
+  loadCategories() {
+    this.productService.getCategories().subscribe({
+      next: (categories) => this.categories.set(categories),
+    });
   }
 
   loadMore() {
@@ -42,7 +73,7 @@ export class Catalog {
     const search = this.searchTerm();
 
     this.productService
-      .getPage(skip, this.pageSize)
+      .getPage(skip, this.pageSize, category, search)
       .pipe(finalize(() => this.loading.set(false)))
       .subscribe({
         next: (page) => {
@@ -55,16 +86,18 @@ export class Catalog {
 
   setSearch(term: string) {
     this.searchTerm.set(term);
-    this.products.set([]);
-    this.total.set(0);
+    this.resetList();
     this.loadMore();
   }
 
   setCategory(category: string) {
     this.selectedCategory.set(category);
-    this.products.set([]);
-    this.total.set(0);
+    this.resetList();
     this.loadMore();
+  }
+
+  clearCategory() {
+    this.setCategory('');
   }
 
   addToCart(product: Product) {
@@ -72,5 +105,10 @@ export class Catalog {
     this.notice.set(`"${product.title}" agregado al carrito`);
     clearTimeout(this.noticeTimer);
     this.noticeTimer = setTimeout(() => this.notice.set(null), 3000);
+  }
+
+  private resetList() {
+    this.products.set([]);
+    this.total.set(0);
   }
 }
