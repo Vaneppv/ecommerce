@@ -1,0 +1,7 @@
+<a class="category-card" [routerLink]="['/products']" [queryParams]="{ category: value() }">
+  <span class="category-card-icon">
+    <tabler-icon icon="category" [size]="26" />
+  </span>
+  <span class="category-card-label">{{ label() }}</span>
+  <span class="category-card-cta">Ver productos</span>
+</a>
