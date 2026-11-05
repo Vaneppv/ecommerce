@@ -76,6 +76,17 @@ describe('App', () => {
     expect((fixture.nativeElement as HTMLElement).querySelector('header')).toBeTruthy();
   });
 
+  it('muestra la acción de inicio de sesión con icono y etiqueta', () => {
+    const fixture = TestBed.createComponent(App);
+    fixture.detectChanges();
+
+    const loginLink = fixture.nativeElement.querySelector('a.topbar-action') as HTMLAnchorElement;
+
+    expect(loginLink.getAttribute('href')).toBe('/login');
+    expect(loginLink.textContent).toContain('Iniciar sesión');
+    expect(loginLink.querySelector('tabler-icon')).toBeTruthy();
+  });
+
   it('debe reflejar la cantidad de productos del carrito en el header badge', () => {
     authService.login('demo@tienda.com', 'demo1234');
     cartService.clearCart();
@@ -98,7 +109,7 @@ describe('App', () => {
     fixture.detectChanges();
 
     const logoutBtn = fixture.nativeElement.querySelector(
-      'button.topbar-link',
+      'button.topbar-action',
     ) as HTMLButtonElement;
     expect(logoutBtn.textContent).toContain('Cerrar sesión');
 
@@ -123,6 +134,30 @@ describe('App', () => {
 
     expect(fixture.componentInstance['isLogoutModalOpen']()).toBe(false);
     expect(authService.isLoggedIn()).toBe(true);
+  });
+
+  it('busca desde el header preservando los filtros de la URL', () => {
+    const navigateSpy = vi.spyOn(router, 'navigate').mockResolvedValue(true);
+    const fixture = TestBed.createComponent(App);
+
+    fixture.componentInstance.onSearch('auriculares');
+
+    expect(navigateSpy).toHaveBeenCalledWith(['/products'], {
+      queryParams: { q: 'auriculares' },
+      queryParamsHandling: 'merge',
+    });
+  });
+
+  it('elimina el término de búsqueda del header al limpiarlo', () => {
+    const navigateSpy = vi.spyOn(router, 'navigate').mockResolvedValue(true);
+    const fixture = TestBed.createComponent(App);
+
+    fixture.componentInstance.onSearch('');
+
+    expect(navigateSpy).toHaveBeenCalledWith(['/products'], {
+      queryParams: { q: null },
+      queryParamsHandling: 'merge',
+    });
   });
 
   it('cierra la sesión, navega a productos y muestra la alerta al confirmar en el modal', () => {

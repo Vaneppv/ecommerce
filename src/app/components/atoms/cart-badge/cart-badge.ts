@@ -1,4 +1,4 @@
-import { Component, input, output } from '@angular/core';
+import { Component, computed, input, output } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { TablerIconComponent } from '@tabler/icons-angular';
 
@@ -11,6 +11,14 @@ import { TablerIconComponent } from '@tabler/icons-angular';
 })
 export class CartBadge {
   count = input<number>(0);
+  label = input<string>('Carrito');
   variant = input<'default' | 'secondary' | 'link'>('default');
   onRemove = output<void>();
+
+  readonly ariaLabel = computed(() => {
+    const count = this.count();
+    return count === 1
+      ? 'Ver carrito de compras, 1 producto'
+      : `Ver carrito de compras, ${count} productos`;
+  });
 }

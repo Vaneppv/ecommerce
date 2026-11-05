@@ -2,10 +2,12 @@
 
 <header class="site-header">
   <div class="topbar">
-    <a class="brand" routerLink="/" aria-label="Ir al inicio">Tienda</a>
+    <img src="logo-light.png" alt="Click & Store" class="brand-logo" routerLink="/" aria-label="Ir al inicio"/>
+    <a class="brand" routerLink="/" aria-label="Ir al inicio">Click & Store</a>
 
     <div class="topbar-search">
       <app-search-form
+        [searchTerm]="searchTerm()"
         placeholder="Buscar productos..."
         buttonVariant="secondary"
         (onSearch)="onSearch($event)"
@@ -14,12 +16,26 @@
 
     <nav class="topbar-actions" aria-label="Cuenta y carrito">
       @if (auth.user(); as user) {
-        <span class="user-name">Hola, {{ user.name }}</span>
-        <button type="button" class="topbar-link" (click)="openLogoutModal()">Cerrar sesión</button>
+        <span class="topbar-user">
+          <tabler-icon icon="user" [size]="18" aria-hidden="true" />
+          <span class="user-name">Hola, {{ user.name }}</span>
+        </span>
+        <button
+          type="button"
+          class="topbar-action"
+          aria-label="Cerrar sesión"
+          (click)="openLogoutModal()"
+        >
+          <tabler-icon icon="logout" [size]="18" aria-hidden="true" />
+          <span class="topbar-action-label">Cerrar sesión</span>
+        </button>
       } @else {
-        <a class="topbar-link" routerLink="/login">Ingresar</a>
+        <a class="topbar-action" routerLink="/login" aria-label="Iniciar sesión">
+          <tabler-icon icon="user" [size]="18" aria-hidden="true" />
+          <span class="topbar-action-label">Iniciar sesión</span>
+        </a>
       }
-      <app-cart-badge [count]="cartService.totalCount()" variant="secondary" />
+      <app-cart-badge [count]="cartService.totalCount()" label="Carrito" variant="secondary" />
     </nav>
   </div>
 

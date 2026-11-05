@@ -22,8 +22,52 @@
   border-color: #3b82f6;
 }
 
+.badge-secondary {
+  gap: 0.4rem;
+  padding: 0.4rem 0.75rem;
+  border-color: rgba(253, 246, 227, 0.35);
+  background: transparent;
+  color: #fdf6e3;
+  font-size: 0.9rem;
+  font-weight: 500;
+  line-height: 1;
+  white-space: nowrap;
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.badge-secondary:hover {
+  border-color: #d2b48c;
+  background: rgba(253, 246, 227, 0.12);
+}
+
+.badge-secondary:focus-visible {
+  outline: 2px solid #d2b48c;
+  outline-offset: 2px;
+}
+
+.badge-secondary .badge-count {
+  padding: 0.05rem 0.4rem;
+  border-radius: 9999px;
+  background: #c9964a;
+  color: #3d2a1f;
+  font-size: 0.7rem;
+  font-weight: 700;
+}
+
+.badge-label {
+  line-height: 1;
+}
+
 .badge-count {
   min-width: 1.25rem;
   text-align: center;
   padding: 0 0.15rem;
+}
+
+@media (max-width: 600px) {
+  .badge-secondary .badge-label {
+    display: none;
+  }
 }
