@@ -170,3 +170,14 @@ main:focus {
     display: none;
   }
 }
+
+@media (pointer: coarse) {
+  .topbar-link {
+    min-height: 44px;
+    padding: 0.6rem 0.75rem;
+  }
+
+  .main-nav a {
+    min-height: 44px;
+  }
+}
