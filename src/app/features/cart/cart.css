@@ -18,6 +18,7 @@
   align-items: center;
 }
 .cart-header {
+  flex-wrap: wrap;
   justify-content: space-between;
   margin-bottom: 1.5rem;
   padding-bottom: 1rem;
@@ -25,7 +26,8 @@
   gap: 1rem;
 }
 .header-titles {
-  gap: 0.75rem;
+  flex-wrap: wrap;
+  gap: 0.25rem 0.75rem;
 }
 .page-title,
 .summary-title,
@@ -36,7 +38,7 @@
   margin: 0;
 }
 .page-title {
-  font-size: 1.6rem;
+  font-size: clamp(1.35rem, 1rem + 2vw, 1.6rem);
 }
 .items-count,
 .back-link,
@@ -287,9 +289,23 @@
     flex-wrap: wrap;
   }
   .item-controls {
+    flex-wrap: wrap;
     width: 100%;
     justify-content: space-between;
     padding-top: 0.65rem;
     border-top: 1px dashed #ebd9c5;
+  }
+}
+@media (pointer: coarse) {
+  .qty-btn,
+  .btn-remove-item {
+    width: 44px;
+    height: 44px;
+  }
+  .item-controls {
+    gap: 0.5rem;
+  }
+  .item-price-column {
+    min-width: 64px;
   }
 }
