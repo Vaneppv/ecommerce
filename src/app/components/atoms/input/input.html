@@ -1,8 +1,9 @@
 <input
   [type]="type()"
+  [value]="value()"
   [placeholder]="placeholder()"
   [disabled]="disabled()"
-  (input)="onInput.emit($event.target.value)"
+  (input)="handleInput($event)"
   (blur)="onBlur.emit()"
   (focus)="onFocus.emit()"
   class="input"

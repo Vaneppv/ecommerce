@@ -1,0 +1,89 @@
+<section class="hero" aria-labelledby="home-title">
+  <p class="eyebrow">Tienda</p>
+  <h1 id="home-title">Descubre productos para tu día a día</h1>
+  <p class="hero-subtitle">
+    Explora nuestra selección de artículos populares y encuentra justo lo que necesitas.
+  </p>
+  <a class="hero-action" routerLink="/products">Ver todo el catálogo</a>
+</section>
+
+@if (notice(); as text) {
+  <p class="notice" role="status">{{ text }}</p>
+}
+
+<section class="section popular-section" aria-labelledby="popular-title">
+  <div class="section-heading">
+    <h2 id="popular-title">Más populares</h2>
+    <a class="section-link" routerLink="/products">Ver todo</a>
+  </div>
+
+  @if (loadingPopular()) {
+    <ul class="popular-grid" aria-hidden="true">
+      @for (placeholder of [1, 2, 3, 4, 5, 6]; track placeholder) {
+        <li class="skeleton-card"></li>
+      }
+    </ul>
+  } @else if (error(); as message) {
+    <div class="state-card" role="alert">
+      <p>{{ message }}</p>
+      <button type="button" class="retry" (click)="loadPopular()">Reintentar</button>
+    </div>
+  } @else {
+    <ul class="popular-grid">
+      @for (product of popular(); track product.id) {
+        <li>
+          <app-product-card
+            [productId]="product.id"
+            [productImage]="product.thumbnail"
+            [productTitle]="product.title"
+            [productPrice]="product.price"
+            [productCategory]="product.category"
+            [isFetching]="true"
+            [isOutOfStock]="product.stock === 0"
+            (onAddToCart)="addToCart(product)"
+          />
+        </li>
+      }
+    </ul>
+  }
+</section>
+
+<section id="categorias" class="section categories-section" aria-labelledby="categories-title">
+  <div class="section-heading">
+    <h2 id="categories-title">Categorías</h2>
+    <div class="carousel-controls">
+      <button
+        type="button"
+        class="carousel-button"
+        aria-label="Categorías anteriores"
+        (click)="scrollCategories(-1)"
+      >
+        <tabler-icon icon="chevron-left" [size]="20" />
+      </button>
+      <button
+        type="button"
+        class="carousel-button"
+        aria-label="Siguientes categorías"
+        (click)="scrollCategories(1)"
+      >
+        <tabler-icon icon="chevron-right" [size]="20" />
+      </button>
+    </div>
+  </div>
+
+  @if (loadingCategories()) {
+    <div class="category-track" aria-hidden="true">
+      @for (placeholder of [1, 2, 3, 4]; track placeholder) {
+        <div class="skeleton-category"></div>
+      }
+    </div>
+  } @else if (categories().length === 0) {
+    <p class="state-text">No hay categorías disponibles por el momento.</p>
+  } @else {
+    <div class="category-track" #categoryTrack>
+      @for (category of categories(); track category) {
+        <app-category-card [label]="formatCategory(category)" [value]="category" />
+      }
+    </div>
+  }
+</section>

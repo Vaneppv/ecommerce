@@ -1,27 +1,24 @@
-/* Base input styles */
-.input {
+input {
   width: 100%;
-  padding: 0.5rem 0.75rem;
-  font-size: 0.875rem;
-  font-family: inherit;
-  color: #111827;
-  background-color: #fff;
-  border: 1px solid #d1d5db;
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  color: #3d2a1f;
+  background: #fff7e7;
+  border: 1px solid #d2b48c;
   border-radius: 4px;
   outline: none;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
-.input::placeholder {
-  color: #6b7280;
+input::placeholder {
+  color: #6b4f3b;
 }
 
-.input:focus {
-  border-color: #3b82f6;
-  box-shadow: 0 0 0 2px #dbeafe;
+input:focus {
+  border-color: #8b5a2b;
+  box-shadow: 0 0 0 2px rgba(139, 90, 43, 0.1);
 }
 
-.input:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
+input:disabled {
+  background: #e5e5e5;
+  color: #999;
 }

@@ -1,33 +1,13 @@
-/* Category filter container */
+:host {
+  display: block;
+}
+
 .category-filter {
   display: flex;
-  gap: 0.5rem;
-  margin-bottom: 1rem;
   flex-wrap: wrap;
+  gap: 0.5rem;
 }
 
-/* Button styling */
-.category-filter button {
-  padding: 0.5rem 1rem;
-  background: transparent;
-  border: 1px solid #d1d5db;
-  border-radius: 4px;
-  color: #111827;
-  font-size: 0.875rem;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.category-filter button:hover {
-  background: #e2e6ea;
-}
-
-.category-filter button:focus-visible {
-  outline: 2px solid #3b82f6;
-  outline-offset: 2px;
-}
-
-.category-filter button.selected {
-  background: #3b82f6;
-  color: white;
+app-category-chip {
+  flex: 0 0 auto;
 }

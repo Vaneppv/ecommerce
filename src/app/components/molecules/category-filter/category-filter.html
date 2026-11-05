@@ -1,11 +1,17 @@
-<div class="category-filter">
-  <app-button
-    variant="secondary"
-    size="small"
-    *ngFor="let category of categories()"
-    [ngClass]="{ selected: filteredCategories().includes(category) }"
-    (click)="onCategoryChange.emit(category)"
-  >
-    {{ category }}
-  </app-button>
+<div class="category-filter" role="group" aria-label="Filtro por categorías">
+  <app-category-chip
+    label="Todas"
+    value="todas"
+    [active]="isAllSelected()"
+    (selected)="onCategoryChange.emit($event)"
+  />
+
+  @for (category of categories(); track category) {
+    <app-category-chip
+      [label]="category | titlecase"
+      [value]="category"
+      [active]="isSelected(category)"
+      (selected)="onCategoryChange.emit($event)"
+    />
+  }
 </div>

@@ -2,9 +2,11 @@
   @for (p of products(); track p.id) {
     <li>
       <app-product-card
+        [productId]="p.id"
         [productImage]="p.thumbnail"
         [productTitle]="p.title"
-        [productPrice]="p.price.toString()"
+        [productPrice]="p.price"
+        [productCategory]="p.category"
         [isFetching]="true"
         (onAddToCart)="onAdd.emit(p)"
       />
@@ -19,6 +21,8 @@
 @if (error(); as message) {
   <p class="error" role="alert">{{ message }}</p>
   <button type="button" class="retry" (click)="onRetry.emit()">Reintentar</button>
+} @else if (!loading() && products().length === 0) {
+  <p class="status empty-state">No se encontraron productos con los criterios seleccionados.</p>
 } @else if (hasMore() && !loading()) {
   <div appInfiniteScroll (reached)="onLoadMore.emit()"></div>
 } @else if (!loading() && products().length > 0) {

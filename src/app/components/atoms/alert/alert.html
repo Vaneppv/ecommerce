@@ -7,21 +7,11 @@
   role="alert"
 >
   <!-- Tabler icon -->
-  <tabler-icon
-    [icon]="getIconName()"
-    [size]="24"
-    [color]="getIconColor()"
-  ></tabler-icon>
+  <tabler-icon [icon]="getIconName()" [size]="24" [color]="getIconColor()"></tabler-icon>
 
   <span>{{ message() }}</span>
 
   @if (closable()) {
-    <button
-      class="alert-close"
-      (click)="onClose.emit()"
-      aria-label="Close alert"
-    >
-      ×
-    </button>
+    <button class="alert-close" (click)="close()" aria-label="Close alert">×</button>
   }
 </div>

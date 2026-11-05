@@ -1,0 +1,9 @@
+<button
+  type="button"
+  class="category-chip"
+  [class.is-active]="active()"
+  [attr.aria-pressed]="active()"
+  (click)="selected.emit(value())"
+>
+  {{ label() }}
+</button>

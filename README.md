@@ -1,117 +1,87 @@
 # Ecommerce
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 22.2.5.
+Aplicación frontend de comercio electrónico desarrollada con Angular 22. Permite
+explorar un catálogo de productos, buscar y filtrar por categoría, ver el detalle
+de cada producto y gestionar un carrito de compras por usuario.
 
-## Development server
+El proyecto es únicamente frontend: consume la API pública de
+[DummyJSON](https://dummyjson.com/) y utiliza datos locales como respaldo cuando
+la API no está disponible.
 
-To start a local development server, run:
+## Funcionalidades
 
-```bash
-ng serve
-```
+- Catálogo con scroll infinito y carga progresiva de imágenes.
+- Búsqueda por nombre o descripción.
+- Filtros por categoría.
+- Vista de detalle de producto.
+- Registro e inicio de sesión de usuarios.
+- Carrito con agregar, quitar, cambiar cantidades y vaciar.
+- Cálculo automático de subtotal, envío y total.
+- Carrito independiente por usuario, persistido en `localStorage`.
+- Acceso al carrito y a la acción de agregar protegidos por sesión.
+- Interfaz responsive y componentes reutilizables.
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+## Stack
 
-## Code scaffolding
+- Angular 22
+- TypeScript
+- RxJS
+- Tabler Icons
+- Vitest + jsdom
+- Prettier
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+## Requisitos
 
-```bash
-ng generate component component-name
-```
+- Node.js `^22.22.3`, `^24.15.0` o `>=26.0.0`
+- npm 8 o superior
+- Navegador moderno
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+No es necesario instalar Angular CLI globalmente: los scripts usan la versión local del proyecto.
 
-```bash
-ng generate --help
-```
+## Instalación y ejecución
 
-## Building
-
-To build the project run:
-
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
+En un directorio de tu preferencia, clona el repositorio:
 
 ```bash
-ng e2e
+git clone git@github.com:Vaneppv/ecommerce.git
+cd ecommerce
+npm install
+npm start
 ```
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+Por defecto, la aplicación estará disponible en `http://localhost:4200/`.
 
-## Estructura del Proyecto (por ahora)
-src/
-├── app/
-│   ├── core/                    # Core singleton services
-│   │   ├── auth.service.ts      # Login/logout state & token
-│   │   ├── cart.service.ts      # Cart state (add/remove/quantity)
-│   │   └── http.service.ts      # HTTP client for external API
-│   │
-│   ├── shared/                  # Atoms & Molecules (reusable UI)
-│   │   ├── atoms/               # Basic UI elements
-│   │   │   ├── button.component.ts
-│   │   │   ├── input.component.ts
-│   │   │   ├── loader.component.ts
-│   │   │   └── image-preview.component.ts
-│   │   │
-│   │   ├── molecules/           # Small groups of atoms
-│   │   │   ├── product-card.component.ts
-│   │   │   ├── search-bar.component.ts
-│   │   │   └── filter-chip.component.ts
-│   │   │
-│   │   └── organisms/           # Complex UI sections
-│   │       ├── product-grid.component.ts
-│   │       └── category-nav.component.ts
-│   │
-│   ├── features/                # Feature-based organization
-│   │   ├── home/                # Home page template
-│   │   │   └── home.component.ts
-│   │   │
-│   │   ├── products/            # Products feature
-│   │   │   ├── components/      # Product organisms
-│   │   │   │   ├── product-list.component.ts
-│   │   │   │   └── infinite-scroll.component.ts
-│   │   │   │
-│   │   │   ├── containers/      # Page-level components
-│   │   │   │    ├── product-list.component.ts
-│   │   │   │    └── product-detail.component.ts
-│   │   │   │
-│   │   │   └── product.routes.ts
-│   │   │
-│   │   ├── cart/                # Cart feature
-│   │   │   ├── cart-summary.component.ts
-│   │   │   ├── cart-item.component.ts
-│   │   │   └── checkout-form.component.ts
-│   │   │
-│   │   └── auth/                # Auth feature
-│   │       ├── login.component.ts
-│   │       └── register.component.ts
-│   │
-│   ├── layouts/                 # Templates/Layouts
-│   │   ├── home/                # Home page layout
-│   │   │   └── home-layout.component.ts
-│   │   │
-│   │   └── product/             # Product category layout
-│   │       └── product-layout.component.ts
-│   │
-│   ├── app.config.ts            # Angular config with providers
-│   ├── app.routes.ts            # Feature routing
-│   └── main.ts
-│
-└── environments/                # Environment configs (dev/prod)
+Para una instalación reproducible en CI o en una máquina limpia:
 
+```bash
+npm ci
+```
+
+## Scripts
+
+| Comando                | Descripción                                 |
+| ---------------------- | ------------------------------------------- |
+| `npm start`            | Inicia el servidor de desarrollo.           |
+| `npm run build`        | Genera el build de producción en `dist/`.   |
+| `npm test`             | Ejecuta los tests con Vitest.               |
+| `npm run format`       | Formatea el código con Prettier.            |
+| `npm run format:check` | Verifica el formato sin modificar archivos. |
+
+## Datos
+
+La aplicación consume los endpoints de `https://dummyjson.com/products`. Si la
+API falla o no hay conexión, `ProductService` usa automáticamente los productos
+de `src/app/core/data/products.mock.ts`, por lo que la tienda sigue siendo
+navegable.
+
+Las cuentas y los carritos se guardan en el `localStorage` del navegador con las
+claves `ecommerce_accounts`, `ecommerce_user` y `ecommerce_carts`. Cada usuario
+tiene su propio carrito, pero no se sincroniza entre dispositivos ni entre
+navegadores. Las contraseñas también viven en `localStorage`, así que este
+mecanismo es solo para desarrollo y no debe usarse en producción.
+
+## Documentación para colaboradores
+
+La arquitectura, estructura de carpetas, convenciones de código, estrategia de
+testing, flujo de Git y tareas pendientes están documentados en
+[CONTRIBUTING.md](./CONTRIBUTING.md).

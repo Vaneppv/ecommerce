@@ -1,5 +1,5 @@
 import { Component, inject } from '@angular/core';
-import { Router, RouterLink } from '@angular/router';
+import { RouterLink } from '@angular/router';
 import { CurrencyPipe, TitleCasePipe } from '@angular/common';
 import { TablerIconComponent } from '@tabler/icons-angular';
 import { CartService } from '../../core/cart.service';
@@ -15,7 +15,6 @@ import { Image } from '../../components/atoms/image/image';
 })
 export class Cart {
   protected readonly cartService = inject(CartService);
-  private readonly router = inject(Router);
 
   onIncrement(productId: number, currentQuantity: number, stock?: number) {
     if (stock !== undefined && currentQuantity >= stock) return;
@@ -36,9 +35,5 @@ export class Cart {
 
   onClear() {
     this.cartService.clearCart();
-  }
-
-  onCheckout() {
-    this.router.navigate(['/checkout']);
   }
 }

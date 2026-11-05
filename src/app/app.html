@@ -1,6 +1,61 @@
-<header class="topbar">
-  <a class="brand" routerLink="/products">Tienda</a>
+<a class="skip-link" href="#main" (click)="skipToContent($event)">Saltar al contenido</a>
+
+<header class="site-header">
+  <div class="topbar">
+    <a class="brand" routerLink="/" aria-label="Ir al inicio">Tienda</a>
+
+    <div class="topbar-search">
+      <app-search-form
+        placeholder="Buscar productos..."
+        buttonVariant="secondary"
+        (onSearch)="onSearch($event)"
+      />
+    </div>
+
+    <nav class="topbar-actions" aria-label="Cuenta y carrito">
+      @if (auth.user(); as user) {
+        <span class="user-name">Hola, {{ user.name }}</span>
+        <button type="button" class="topbar-link" (click)="openLogoutModal()">Cerrar sesión</button>
+      } @else {
+        <a class="topbar-link" routerLink="/login">Ingresar</a>
+      }
+      <app-cart-badge [count]="cartService.totalCount()" variant="secondary" />
+    </nav>
+  </div>
+
+  <nav class="main-nav" aria-label="Navegación principal">
+    <a routerLink="/" routerLinkActive="is-active" [routerLinkActiveOptions]="{ exact: true }">
+      <tabler-icon icon="home" [size]="18" />
+      <span>Inicio</span>
+    </a>
+    <a routerLink="/products" routerLinkActive="is-active">
+      <tabler-icon icon="layout-grid" [size]="18" />
+      <span>Productos</span>
+    </a>
+    <a routerLink="/" fragment="categorias">
+      <tabler-icon icon="category" [size]="18" />
+      <span>Categorías</span>
+    </a>
+  </nav>
 </header>
-<main>
+
+@if (logoutAlert(); as alertMsg) {
+  <div class="top-notification-container">
+    <app-alert type="info" [message]="alertMsg" [timeout]="5" (onClose)="clearLogoutAlert()" />
+  </div>
+}
+
+<main id="main" tabindex="-1">
   <router-outlet />
 </main>
+
+<app-confirm-dialog
+  [open]="isLogoutModalOpen()"
+  title="¿Cerrar sesión?"
+  message="¿Estás seguro de que deseas salir de tu cuenta? Tendrás que volver a iniciar sesión para acceder a tu perfil."
+  confirmText="Cerrar sesión"
+  cancelText="Cancelar"
+  icon="logout"
+  (onConfirm)="confirmLogout()"
+  (onCancel)="cancelLogout()"
+/>

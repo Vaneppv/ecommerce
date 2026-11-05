@@ -44,8 +44,8 @@ Abre `http://localhost:4200/`. El servidor recarga automáticamente al modificar
 | Prettier 3              | Formato uniforme de TypeScript, HTML, CSS, JSON y Markdown.     |
 
 No hay librería de estado global (NgRx, Akita, etc.) ni backend propio.
-El estado del carrito vive en un servicio con signals y se persiste en
-`localStorage`.
+El estado del carrito vive en un servicio con signals y se persiste por usuario
+en `localStorage`. La sesión activa también vive en `localStorage`.
 
 ## 4. Arquitectura
 
@@ -88,25 +88,19 @@ src/
 │   │   │   └── products.mock.ts   # Datos de respaldo
 │   │   ├── models/
 │   │   │   ├── cart.model.ts
-│   │   │   ├── order.model.ts
 │   │   │   ├── product-page.model.ts
-│   │   │   ├── product.model.ts
-│   │   │   └── user.model.ts
+│   │   │   └── product.model.ts
 │   │   ├── auth.guard.ts
 │   │   ├── auth.service.ts
+│   │   ├── cart-access.service.ts
 │   │   ├── cart.service.ts
-│   │   ├── form-errors.ts         # Mensajes de error de formularios
-│   │   ├── order.service.ts       # Simulación de la compra
-│   │   ├── product-service.ts
-│   │   └── validators.ts          # Validadores de tarjeta y vencimiento
+│   │   └── product-service.ts
 │   ├── directives/
 │   │   └── infinite-scroll.ts
 │   ├── features/
 │   │   ├── auth/
 │   │   │   └── login/             # Página de inicio de sesión
 │   │   ├── cart/                  # Página del carrito
-│   │   ├── checkout/              # Formulario de compra simulado
-│   │   ├── home/                  # Página de inicio
 │   │   ├── not-found/             # Página 404 para rutas inexistentes
 │   │   └── products/
 │   │       ├── catalog/           # Página del catálogo
@@ -149,20 +143,19 @@ Reglas prácticas:
 
 ### 4.4 Rutas actuales
 
-| Ruta            | Componente      | Descripción                              |
-| --------------- | --------------- | ---------------------------------------- |
-| `/`             | `Home`          | Inicio con categorías y populares.       |
-| `/products`     | `Catalog`       | Catálogo con búsqueda y filtros.         |
-| `/products/:id` | `ProductDetail` | Detalle de un producto.                  |
-| `/cart`         | `Cart`          | Carrito y resumen del pedido.            |
-| `/checkout`     | `Checkout`      | Compra simulada (requiere sesión).       |
-| `/login`        | `Login`         | Inicio de sesión de usuarios.            |
-| `/not-found`    | `NotFound`      | Página de error 404 explícita.           |
-| `**`            | `NotFound`      | Página de error para rutas inexistentes. |
+| Ruta            | Componente      | Descripción                                    |
+| --------------- | --------------- | ---------------------------------------------- |
+| `/`             | `Home`          | Página de inicio con productos populares.      |
+| `/products`     | `Catalog`       | Catálogo con búsqueda y filtros.               |
+| `/products/:id` | `ProductDetail` | Detalle de un producto.                        |
+| `/cart`         | `Cart`          | Carrito y resumen del pedido. Requiere sesión. |
+| `/login`        | `Login`         | Inicio de sesión y creación de cuentas.        |
+| `/not-found`    | `NotFound`      | Página de error 404 explícita.                 |
+| `**`            | `NotFound`      | Página de error para rutas inexistentes.       |
 
-`/checkout` está protegida con `authGuard`: si no hay sesión, redirige a `/login`
-con `returnUrl` y vuelve al checkout tras autenticarse. Todas las páginas se cargan de forma perezosa. Si agregas una ruta nueva, sigue
-el mismo patrón de `loadComponent`.
+Todas las páginas se cargan de forma perezosa. Si agregas una ruta nueva, sigue
+el mismo patrón de `loadComponent`. La ruta `/cart` usa `authGuard`: si no hay
+sesión, redirige a `/login` con `returnUrl` y `reason=cart`.
 
 ### 4.5 Flujo de datos
 
@@ -184,20 +177,21 @@ el mismo patrón de `loadComponent`.
 
 **Carrito**
 
-1. `CartService` mantiene `items` como signal.
-2. `totalCount`, `subtotal`, `shipping` y `total` son `computed`.
-3. El header, el carrito y el detalle leen el mismo servicio singleton.
-4. Cada cambio se persiste en `localStorage` con la clave `ecommerce_cart`.
+1. `CartService` mantiene un mapa de carritos por correo de usuario y lo persiste en `localStorage` con la clave `ecommerce_carts`.
+2. `owner` se deriva del usuario activo (`AuthService`); sin sesión vale `null` y el carrito visible queda vacío.
+3. `items` es un `computed` del carrito del propietario actual. `totalCount`, `subtotal`, `shipping` y `total` también son `computed`.
+4. `addItem`, `removeItem`, `updateQuantity` y `clearCart` solo modifican el carrito del usuario activo; sin sesión no hacen nada.
+5. `Home`, `Catalog` y `ProductDetail` usan `CartAccessService.add()`: si no hay sesión, redirigen a `/login?returnUrl=...&reason=cart`; si la hay, agregan el producto.
+6. El carrito antiguo con la clave `ecommerce_cart` se migra automáticamente al primer usuario autenticado.
 
 ### 4.6 Modelos
 
-| Modelo        | Archivo                             | Uso                                                                 |
-| ------------- | ----------------------------------- | ------------------------------------------------------------------- |
-| `Product`     | `core/models/product.model.ts`      | Producto completo, alineado con la respuesta de DummyJSON.          |
-| `ProductPage` | `core/models/product-page.model.ts` | Página de productos: `products`, `total`, `skip`, `limit`.          |
-| `CartItem`    | `core/models/cart.model.ts`         | Producto + cantidad dentro del carrito.                             |
-| `CartSummary` | `core/models/cart.model.ts`         | Resumen tipado de totales (no se usa todavía en componentes).       |
-| `Order`       | `core/models/order.model.ts`        | Pedido confirmado. Solo guarda los últimos 4 dígitos de la tarjeta. |
+| Modelo        | Archivo                             | Uso                                                           |
+| ------------- | ----------------------------------- | ------------------------------------------------------------- |
+| `Product`     | `core/models/product.model.ts`      | Producto completo, alineado con la respuesta de DummyJSON.    |
+| `ProductPage` | `core/models/product-page.model.ts` | Página de productos: `products`, `total`, `skip`, `limit`.    |
+| `CartItem`    | `core/models/cart.model.ts`         | Producto + cantidad dentro del carrito.                       |
+| `CartSummary` | `core/models/cart.model.ts`         | Resumen tipado de totales (no se usa todavía en componentes). |
 
 `Product` extiende `BaseProduct` e incluye campos como `stock`, `brand`, `sku`,
 `dimensions`, `reviews`, `images` y `meta`. Si la API cambia, actualiza el
@@ -226,19 +220,33 @@ Archivo: `src/app/core/product-service.ts`.
 
 Archivo: `src/app/core/cart.service.ts`.
 
-- `addItem(product, quantity = 1)`: agrega o incrementa; ignora cantidades
-  menores o iguales a cero.
-- `removeItem(productId)`: elimina el producto.
+- `owner`: `computed` con el correo normalizado del usuario activo o `null`.
+- `items`: `computed` con el carrito del propietario actual. Sin sesión devuelve `[]`.
+- `addItem(product, quantity = 1)`: agrega o incrementa en el carrito del usuario
+  activo; ignora cantidades menores o iguales a cero y no hace nada sin sesión.
+- `removeItem(productId)`: elimina el producto del carrito activo.
 - `updateQuantity(productId, quantity)`: actualiza; si la cantidad es cero o menor,
   elimina.
-- `clearCart()`: vacía el carrito.
+- `clearCart()`: vacía el carrito del usuario activo.
 - Regla de envío: gratis desde $50 de subtotal; en caso contrario $5.99; carrito
   vacío = $0.
-- Persistencia tolerante a errores de `localStorage`.
+- Persistencia tolerante a errores de `localStorage` bajo la clave
+  `ecommerce_carts`, con la forma `{ "correo@ejemplo.com": [CartItem, ...] }`.
+- Migra el antiguo `ecommerce_cart` al primer usuario autenticado.
 
 La validación de stock se hace en la UI del detalle y del carrito. Si se
 centraliza en el servicio, hay que actualizar los tests y revisar los componentes
 que ya limitan la cantidad.
+
+#### `CartAccessService`
+
+Archivo: `src/app/core/cart-access.service.ts`.
+
+- `add(product, quantity = 1)`: si hay sesión, delega en `CartService.addItem()` y
+  devuelve `true`; si no, navega a `/login` con `returnUrl` y `reason=cart`, y
+  devuelve `false`.
+- Centraliza la regla de negocio para que `Home`, `Catalog` y `ProductDetail` no
+  dupliquen la comprobación de sesión.
 
 #### `AuthService`
 
@@ -250,18 +258,6 @@ Archivo: `src/app/core/auth.service.ts`.
 - `register(name, email, password)`: valida unicidad de correo, persiste la nueva cuenta en `localStorage` e inicia sesión automáticamente.
 - `login(email, password)`: valida credenciales contra las cuentas disponibles y persiste la sesión activa en `localStorage` con la clave `ecommerce_user`.
 - `logout()`: limpia la sesión activa en memoria y en `localStorage`, preservando las cuentas registradas.
-
-#### `OrderService` y validadores
-
-Archivos: `src/app/core/order.service.ts` y `src/app/core/validators.ts`.
-
-- `place(request)`: simula el pago (1,2 s de espera), arma el `Order` a partir del
-  carrito, lo expone en `lastOrder` y vacía el carrito. No hay backend ni se
-  persiste nada. El número completo de la tarjeta y el CVV nunca se almacenan.
-- `cardNumberValidator`: 13 a 19 dígitos y dígito de control (algoritmo de Luhn).
-- `expiryValidator()`: formato `MM/AA` y que no esté vencida.
-- Ambos devuelven las claves de error `cardNumber` y `expiry`, que traduce
-  `errorMessage()` en `form-errors.ts`.
 
 ### 4.8 Estado y reactividad
 
@@ -400,7 +396,7 @@ TestBed.configureTestingModule({
 - Lógica de servicios: cálculos, persistencia, fallback y manejo de errores.
 - Componentes: renderizado de estados de carga, error, vacío y datos.
 - Acciones principales: buscar, filtrar, agregar al carrito, cambiar cantidades y vaciar.
-- Formularios: campos obligatorios, formatos inválidos y envío exitoso (ver `checkout.spec.ts`).
+- Formularios: campos obligatorios, formatos inválidos y envío exitoso (cuando se implemente checkout).
 
 ### Commits
 

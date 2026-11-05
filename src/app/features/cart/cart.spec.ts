@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { Router, provideRouter } from '@angular/router';
+import { provideRouter } from '@angular/router';
 import {
   IconArrowLeft,
   IconArrowRight,
@@ -11,6 +11,7 @@ import {
   provideTablerIcons,
 } from '@tabler/icons-angular';
 import { Cart } from './cart';
+import { AuthService } from '../../core/auth.service';
 import { CartService } from '../../core/cart.service';
 import { Product } from '../../core/models/product.model';
 
@@ -67,6 +68,8 @@ describe('Cart Component', () => {
       ],
     }).compileComponents();
 
+    const authService = TestBed.inject(AuthService);
+    authService.login('demo@tienda.com', 'demo1234');
     cartService = TestBed.inject(CartService);
     cartService.clearCart();
 
@@ -160,16 +163,5 @@ describe('Cart Component', () => {
 
     expect(summaryCard.textContent).toContain('Gratis');
     expect(summaryCard.textContent).toContain('$60.00');
-  });
-
-  it('navega al checkout al presionar "Proceder al pago"', () => {
-    const router = TestBed.inject(Router);
-    const navigate = vi.spyOn(router, 'navigate').mockResolvedValue(true);
-    cartService.addItem(createProduct(1, 'Producto A', 10), 1);
-    fixture.detectChanges();
-
-    fixture.nativeElement.querySelector('.btn-checkout button').click();
-
-    expect(navigate).toHaveBeenCalledWith(['/checkout']);
   });
 });

@@ -1,32 +1,43 @@
-<app-image
-  [src]="productImage()"
-  [alt]="productTitle()"
-  [loading]="isFetching()"
-  (onLoad)="onImageLoad.emit()"
-  (onError)="onImageError.emit($event)"
-></app-image>
+<article class="product-card">
+  <a class="product-card-media" [routerLink]="['/products', productId()]">
+    <app-image
+      [src]="productImage()"
+      [alt]="productTitle()"
+      [loading]="isFetching()"
+      (onLoad)="onImageLoad.emit()"
+      (onError)="onImageError.emit($event)"
+    />
+    @if (productCategory()) {
+      <span class="product-category">{{ productCategory() | titlecase }}</span>
+    }
+  </a>
 
-<div class="product-card-content">
-  <h3 class="product-title">{{ productTitle() | titlecase }}</h3>
-  <p class="product-price">{{ productPrice() | currency }}</p>
+  <div class="product-card-content">
+    <a class="product-title-link" [routerLink]="['/products', productId()]">
+      <h3 class="product-title">{{ productTitle() | titlecase }}</h3>
+    </a>
+    <p class="product-price">{{ productPrice() | currency }}</p>
 
-  <div class="product-actions">
-    <app-button
-      variant="primary"
-      size="small"
-      (click)="onAddToCart.emit(undefined)"
-      [disabled]="isOutOfStock()"
-    >
-      Añadir al carrito
-    </app-button>
+    <div class="product-actions">
+      <app-button
+        variant="primary"
+        size="small"
+        [successFeedback]="true"
+        successText="Agregado"
+        (onClick)="onAddToCart.emit()"
+        [disabled]="isOutOfStock()"
+      >
+        Añadir al carrito
+      </app-button>
 
-    <app-button
-      variant="ghost"
-      size="small"
-      (click)="onQuickView.emit(undefined)"
-      title="Quick view"
-    >
-      <svg>...</svg> Ver detalles
-    </app-button>
-</div>
-</div>
+      <a
+        [routerLink]="['/products', productId()]"
+        class="btn-detail"
+        title="Ver detalles"
+        aria-label="Ver detalles"
+      >
+        <tabler-icon icon="eye" [size]="16"></tabler-icon>
+      </a>
+    </div>
+  </div>
+</article>
