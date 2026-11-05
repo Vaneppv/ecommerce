@@ -1,0 +1,313 @@
+<div class="checkout-container">
+  @if (order(); as confirmed) {
+    <section class="confirmation-card" aria-labelledby="confirmation-title">
+      <div class="confirmation-icon" aria-hidden="true">
+        <tabler-icon icon="circle-check" [size]="56" />
+      </div>
+      <h1 id="confirmation-title" class="page-title">¡Gracias por tu compra!</h1>
+      <p class="confirmation-text">
+        Hemos registrado tu pedido <strong>{{ confirmed.id }}</strong> el
+        {{ confirmed.createdAt | date: 'dd/MM/yyyy HH:mm' }}. Esta es una compra simulada: no se
+        realizó ningún cargo real.
+      </p>
+
+      <ul class="confirmation-items" aria-label="Productos comprados">
+        @for (item of confirmed.items; track item.product.id) {
+          <li class="confirmation-item">
+            <span>{{ item.quantity }} × {{ item.product.title }}</span>
+            <span>{{ item.product.price * item.quantity | currency }}</span>
+          </li>
+        }
+      </ul>
+
+      <dl class="confirmation-totals">
+        <div>
+          <dt>Subtotal</dt>
+          <dd>{{ confirmed.subtotal | currency }}</dd>
+        </div>
+        <div>
+          <dt>Envío</dt>
+          <dd>{{ confirmed.shipping === 0 ? 'Gratis' : (confirmed.shipping | currency) }}</dd>
+        </div>
+        <div class="grand-total">
+          <dt>Total pagado</dt>
+          <dd>{{ confirmed.total | currency }}</dd>
+        </div>
+      </dl>
+
+      <p class="confirmation-meta">
+        Enviaremos la confirmación a <strong>{{ confirmed.shippingInfo.email }}</strong
+        >. Pago con tarjeta terminada en <strong>{{ confirmed.cardLast4 }}</strong
+        >.
+      </p>
+
+      <a routerLink="/products" class="btn-shop">
+        <tabler-icon icon="shopping-cart" [size]="18" />
+        <span>Seguir comprando</span>
+      </a>
+    </section>
+  } @else if (cart.items().length === 0) {
+    <section class="empty-card">
+      <tabler-icon icon="shopping-bag" [size]="48" aria-hidden="true" />
+      <h1 class="page-title">No hay nada que pagar</h1>
+      <p>Tu carrito está vacío. Agrega productos antes de finalizar la compra.</p>
+      <a routerLink="/products" class="btn-shop">
+        <tabler-icon icon="layout-grid" [size]="18" />
+        <span>Explorar catálogo</span>
+      </a>
+    </section>
+  } @else {
+    <div class="checkout-header">
+      <h1 class="page-title">Finalizar compra</h1>
+      <a routerLink="/cart" class="back-link">
+        <tabler-icon icon="arrow-left" [size]="16" />
+        <span>Volver al carrito</span>
+      </a>
+    </div>
+
+    <div class="checkout-layout">
+      <form [formGroup]="form" (ngSubmit)="submit()" novalidate class="checkout-form">
+        @if (submitError(); as message) {
+          <app-alert
+            type="error"
+            [message]="message"
+            [timeout]="null"
+            (onClose)="submitError.set(null)"
+          />
+        }
+
+        <fieldset class="form-section">
+          <legend class="section-title">Datos de envío</legend>
+          <div class="fields-grid">
+            @for (field of shippingFields; track field.name) {
+              @let ctrl = form.controls[field.name];
+              @let err = errorMessage(ctrl, field.patternMessage);
+              <div class="form-group" [class.half]="field.half" [class.has-error]="err">
+                <label [for]="'checkout-' + field.name" class="form-label">{{ field.label }}</label>
+                <div class="input-wrapper">
+                  <tabler-icon
+                    [icon]="field.icon"
+                    [size]="18"
+                    class="input-icon"
+                    aria-hidden="true"
+                  />
+                  <input
+                    [id]="'checkout-' + field.name"
+                    [type]="field.type"
+                    [formControlName]="field.name"
+                    [attr.autocomplete]="field.autocomplete"
+                    [attr.inputmode]="field.inputmode ?? null"
+                    [placeholder]="field.placeholder"
+                    class="form-input"
+                    [attr.aria-invalid]="err ? 'true' : null"
+                    [attr.aria-describedby]="err ? 'checkout-' + field.name + '-error' : null"
+                  />
+                </div>
+                @if (err) {
+                  <p [id]="'checkout-' + field.name + '-error'" class="form-error" role="alert">
+                    {{ err }}
+                  </p>
+                }
+              </div>
+            }
+          </div>
+        </fieldset>
+
+        <fieldset class="form-section">
+          <legend class="section-title">Pago simulado</legend>
+          <p class="section-hint">
+            No uses una tarjeta real. Para probar: <code>4111 1111 1111 1111</code>, cualquier fecha
+            futura y un CVV de 3 dígitos.
+          </p>
+          <div class="fields-grid">
+            @let nameCtrl = form.controls.cardName;
+            @let nameErr = errorMessage(nameCtrl);
+            <div class="form-group" [class.has-error]="nameErr">
+              <label for="checkout-cardName" class="form-label">{{ cardNameField.label }}</label>
+              <div class="input-wrapper">
+                <tabler-icon
+                  [icon]="cardNameField.icon"
+                  [size]="18"
+                  class="input-icon"
+                  aria-hidden="true"
+                />
+                <input
+                  id="checkout-cardName"
+                  type="text"
+                  formControlName="cardName"
+                  [attr.autocomplete]="cardNameField.autocomplete"
+                  [placeholder]="cardNameField.placeholder"
+                  class="form-input"
+                  [attr.aria-invalid]="nameErr ? 'true' : null"
+                  [attr.aria-describedby]="nameErr ? 'checkout-cardName-error' : null"
+                />
+              </div>
+              @if (nameErr) {
+                <p id="checkout-cardName-error" class="form-error" role="alert">{{ nameErr }}</p>
+              }
+            </div>
+
+            @let numberCtrl = form.controls.cardNumber;
+            @let numberErr = errorMessage(numberCtrl);
+            <div class="form-group" [class.has-error]="numberErr">
+              <label for="checkout-cardNumber" class="form-label">{{
+                cardNumberField.label
+              }}</label>
+              <div class="input-wrapper">
+                <tabler-icon
+                  [icon]="cardNumberField.icon"
+                  [size]="18"
+                  class="input-icon"
+                  aria-hidden="true"
+                />
+                <input
+                  id="checkout-cardNumber"
+                  type="text"
+                  inputmode="numeric"
+                  formControlName="cardNumber"
+                  [attr.autocomplete]="cardNumberField.autocomplete"
+                  [placeholder]="cardNumberField.placeholder"
+                  class="form-input"
+                  (input)="onCardNumberInput($event)"
+                  [attr.aria-invalid]="numberErr ? 'true' : null"
+                  [attr.aria-describedby]="numberErr ? 'checkout-cardNumber-error' : null"
+                />
+              </div>
+              @if (numberErr) {
+                <p id="checkout-cardNumber-error" class="form-error" role="alert">
+                  {{ numberErr }}
+                </p>
+              }
+            </div>
+
+            @let expiryCtrl = form.controls.expiry;
+            @let expiryErr = errorMessage(expiryCtrl);
+            <div class="form-group half" [class.has-error]="expiryErr">
+              <label for="checkout-expiry" class="form-label">{{ expiryField.label }}</label>
+              <div class="input-wrapper">
+                <tabler-icon
+                  [icon]="expiryField.icon"
+                  [size]="18"
+                  class="input-icon"
+                  aria-hidden="true"
+                />
+                <input
+                  id="checkout-expiry"
+                  type="text"
+                  inputmode="numeric"
+                  formControlName="expiry"
+                  [attr.autocomplete]="expiryField.autocomplete"
+                  [placeholder]="expiryField.placeholder"
+                  class="form-input"
+                  (input)="onExpiryInput($event)"
+                  [attr.aria-invalid]="expiryErr ? 'true' : null"
+                  [attr.aria-describedby]="expiryErr ? 'checkout-expiry-error' : null"
+                />
+              </div>
+              @if (expiryErr) {
+                <p id="checkout-expiry-error" class="form-error" role="alert">{{ expiryErr }}</p>
+              }
+            </div>
+
+            @let cvvCtrl = form.controls.cvv;
+            @let cvvErr = errorMessage(cvvCtrl, cvvField.patternMessage);
+            <div class="form-group half" [class.has-error]="cvvErr">
+              <label for="checkout-cvv" class="form-label">{{ cvvField.label }}</label>
+              <div class="input-wrapper">
+                <tabler-icon
+                  [icon]="cvvField.icon"
+                  [size]="18"
+                  class="input-icon"
+                  aria-hidden="true"
+                />
+                <input
+                  id="checkout-cvv"
+                  type="password"
+                  inputmode="numeric"
+                  formControlName="cvv"
+                  [attr.autocomplete]="cvvField.autocomplete"
+                  [placeholder]="cvvField.placeholder"
+                  class="form-input"
+                  (input)="onCvvInput($event)"
+                  [attr.aria-invalid]="cvvErr ? 'true' : null"
+                  [attr.aria-describedby]="cvvErr ? 'checkout-cvv-error' : null"
+                />
+              </div>
+              @if (cvvErr) {
+                <p id="checkout-cvv-error" class="form-error" role="alert">{{ cvvErr }}</p>
+              }
+            </div>
+          </div>
+        </fieldset>
+
+        @let termsCtrl = form.controls.acceptTerms;
+        @let termsErr = errorMessage(termsCtrl);
+        <div class="form-group terms" [class.has-error]="termsErr">
+          <label class="checkbox-label" for="checkout-terms">
+            <input
+              id="checkout-terms"
+              type="checkbox"
+              formControlName="acceptTerms"
+              [attr.aria-invalid]="termsErr ? 'true' : null"
+              [attr.aria-describedby]="termsErr ? 'checkout-terms-error' : null"
+            />
+            <span>Acepto los términos y condiciones de esta compra simulada.</span>
+          </label>
+          @if (termsErr) {
+            <p id="checkout-terms-error" class="form-error" role="alert">
+              Debes aceptar los términos para continuar.
+            </p>
+          }
+        </div>
+
+        <app-button
+          type="submit"
+          size="large"
+          variant="primary"
+          class="submit-btn"
+          [loading]="submitting()"
+          loadingText="Procesando pago..."
+        >
+          <span>Pagar {{ cart.total() | currency }}</span>
+        </app-button>
+      </form>
+
+      <aside class="order-summary" aria-label="Resumen del pedido">
+        <h2 class="summary-title">Resumen del pedido</h2>
+        <ul class="summary-items">
+          @for (item of cart.items(); track item.product.id) {
+            <li class="summary-item">
+              <app-image
+                [src]="item.product.thumbnail"
+                [alt]="item.product.title"
+                [loading]="false"
+              />
+              <div class="summary-item-info">
+                <span class="summary-item-title">{{ item.product.title }}</span>
+                <span class="summary-item-qty">Cantidad: {{ item.quantity }}</span>
+              </div>
+              <span class="summary-item-price">{{
+                item.product.price * item.quantity | currency
+              }}</span>
+            </li>
+          }
+        </ul>
+
+        <dl class="summary-totals">
+          <div>
+            <dt>Subtotal</dt>
+            <dd>{{ cart.subtotal() | currency }}</dd>
+          </div>
+          <div>
+            <dt>Envío</dt>
+            <dd>{{ cart.shipping() === 0 ? 'Gratis' : (cart.shipping() | currency) }}</dd>
+          </div>
+          <div class="grand-total">
+            <dt>Total</dt>
+            <dd>{{ cart.total() | currency }}</dd>
+          </div>
+        </dl>
+      </aside>
+    </div>
+  }
+</div>
