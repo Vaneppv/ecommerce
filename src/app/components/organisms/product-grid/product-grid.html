@@ -1,4 +1,4 @@
-<ul class="grid">
+<ul class="grid" [attr.aria-busy]="loading()">
   @for (p of products(); track p.id) {
     <li>
       <app-product-card
@@ -12,10 +12,20 @@
       />
     </li>
   }
+
+  @if (loading()) {
+    @for (placeholder of skeletons(); track placeholder) {
+      <li aria-hidden="true">
+        <app-product-card-skeleton />
+      </li>
+    }
+  }
 </ul>
 
 @if (loading()) {
-  <p class="status" role="status">Cargando productos…</p>
+  <p class="visually-hidden" role="status">
+    {{ products().length === 0 ? 'Cargando productos…' : 'Cargando más productos…' }}
+  </p>
 }
 
 @if (error(); as message) {
