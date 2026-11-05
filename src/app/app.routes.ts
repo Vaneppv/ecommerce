@@ -22,5 +22,12 @@ export const routes: Routes = [
     path: 'login',
     loadComponent: () => import('./features/auth/login/login').then((m) => m.Login),
   },
-  { path: '**', redirectTo: '' },
+  {
+    path: 'not-found',
+    loadComponent: () => import('./features/not-found/not-found').then((m) => m.NotFound),
+  },
+  {
+    path: '**',
+    loadComponent: () => import('./features/not-found/not-found').then((m) => m.NotFound),
+  },
 ];

@@ -78,6 +78,7 @@ src/
 │   │   │   └── input/
 │   │   ├── molecules/             # Combinaciones de átomos
 │   │   │   ├── category-filter/
+│   │   │   ├── confirm-dialog/
 │   │   │   ├── product-card/
 │   │   │   └── search-form/
 │   │   └── organisms/             # Secciones complejas
@@ -94,7 +95,10 @@ src/
 │   ├── directives/
 │   │   └── infinite-scroll.ts
 │   ├── features/
+│   │   ├── auth/
+│   │   │   └── login/             # Página de inicio de sesión
 │   │   ├── cart/                  # Página del carrito
+│   │   ├── not-found/             # Página 404 para rutas inexistentes
 │   │   └── products/
 │   │       ├── catalog/           # Página del catálogo
 │   │       └── detail/            # Página de detalle
@@ -136,12 +140,14 @@ Reglas prácticas:
 
 ### 4.4 Rutas actuales
 
-| Ruta            | Componente      | Descripción                      |
-| --------------- | --------------- | -------------------------------- |
-| `/products`     | `Catalog`       | Catálogo con búsqueda y filtros. |
-| `/products/:id` | `ProductDetail` | Detalle de un producto.          |
-| `/cart`         | `Cart`          | Carrito y resumen del pedido.    |
-| `**`            | —               | Redirección a `/products`.       |
+| Ruta            | Componente      | Descripción                              |
+| --------------- | --------------- | ---------------------------------------- |
+| `/products`     | `Catalog`       | Catálogo con búsqueda y filtros.         |
+| `/products/:id` | `ProductDetail` | Detalle de un producto.                  |
+| `/cart`         | `Cart`          | Carrito y resumen del pedido.            |
+| `/login`        | `Login`         | Inicio de sesión de usuarios.            |
+| `/not-found`    | `NotFound`      | Página de error 404 explícita.           |
+| `**`            | `NotFound`      | Página de error para rutas inexistentes. |
 
 Todas las páginas se cargan de forma perezosa. Si agregas una ruta nueva, sigue
 el mismo patrón de `loadComponent`.
@@ -220,6 +226,17 @@ Archivo: `src/app/core/cart.service.ts`.
 La validación de stock se hace en la UI del detalle y del carrito. Si se
 centraliza en el servicio, hay que actualizar los tests y revisar los componentes
 que ya limitan la cantidad.
+
+#### `AuthService`
+
+Archivo: `src/app/core/auth.service.ts`.
+
+- `user`: signal con el usuario activo o `null`.
+- `isLoggedIn`: `computed` que verifica si `user() !== null`.
+- `getAccounts()`: devuelve la lista combinada de cuentas predeterminadas (`demo@tienda.com`) y las cuentas registradas en `localStorage` con la clave `ecommerce_accounts`.
+- `register(name, email, password)`: valida unicidad de correo, persiste la nueva cuenta en `localStorage` e inicia sesión automáticamente.
+- `login(email, password)`: valida credenciales contra las cuentas disponibles y persiste la sesión activa en `localStorage` con la clave `ecommerce_user`.
+- `logout()`: limpia la sesión activa en memoria y en `localStorage`, preservando las cuentas registradas.
 
 ### 4.8 Estado y reactividad
 

@@ -46,7 +46,3 @@
 app-button {
   flex-shrink: 0;
 }
-
-app-button span {
-  margin-left: 0.25rem;
-}

@@ -60,6 +60,13 @@
   gap: 0.5rem;
 }
 
+.top-notification-container {
+  width: 100%;
+  max-width: var(--page-max-width);
+  margin: 1.25rem auto 0;
+  padding: 0 var(--page-gutter);
+}
+
 .user-name {
   font-size: 0.9rem;
 }

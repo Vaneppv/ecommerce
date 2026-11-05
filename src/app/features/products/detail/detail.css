@@ -247,10 +247,6 @@
   font-size: 1rem;
 }
 
-.purchase-actions app-button span {
-  margin-left: 0.5rem;
-}
-
 .policies-box {
   padding-top: 1rem;
   border-top: 1px solid #e8dccb;

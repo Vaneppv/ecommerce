@@ -92,6 +92,8 @@
           <app-button
             variant="primary"
             size="large"
+            [successFeedback]="true"
+            successText="Agregado"
             (onClick)="addToCart()"
             [disabled]="p.stock === 0"
           >
