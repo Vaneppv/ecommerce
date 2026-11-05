@@ -1,11 +1,39 @@
 import { Routes } from '@angular/router';
+import { authGuard } from './core/auth.guard';
 
 export const routes: Routes = [
-  { path: '', pathMatch: 'full', redirectTo: 'products' },
+  {
+    path: '',
+    pathMatch: 'full',
+    loadComponent: () => import('./features/home/home').then((m) => m.Home),
+  },
   {
     path: 'products',
-    loadComponent: () =>
-      import('./features/products/catalog/catalog').then((m) => m.Catalog),
+    loadComponent: () => import('./features/products/catalog/catalog').then((m) => m.Catalog),
   },
-  { path: '**', redirectTo: 'products' },
+  {
+    path: 'products/:id',
+    loadComponent: () => import('./features/products/detail/detail').then((m) => m.ProductDetail),
+  },
+  {
+    path: 'cart',
+    loadComponent: () => import('./features/cart/cart').then((m) => m.Cart),
+  },
+  {
+    path: 'checkout',
+    canActivate: [authGuard],
+    loadComponent: () => import('./features/checkout/checkout').then((m) => m.Checkout),
+  },
+  {
+    path: 'login',
+    loadComponent: () => import('./features/auth/login/login').then((m) => m.Login),
+  },
+  {
+    path: 'not-found',
+    loadComponent: () => import('./features/not-found/not-found').then((m) => m.NotFound),
+  },
+  {
+    path: '**',
+    loadComponent: () => import('./features/not-found/not-found').then((m) => m.NotFound),
+  },
 ];
