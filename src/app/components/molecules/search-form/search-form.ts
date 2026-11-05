@@ -1,4 +1,4 @@
-import { Component, input, output, signal } from '@angular/core';
+import { Component, effect, input, output, signal } from '@angular/core';
 import { TablerIconComponent } from '@tabler/icons-angular';
 import { Button } from '../../atoms/button/button';
 import { Input } from '../../atoms/input/input';
@@ -19,8 +19,8 @@ export class SearchForm {
 
   readonly localTerm = signal('');
 
-  ngOnInit() {
-    this.localTerm.set(this.searchTerm());
+  constructor() {
+    effect(() => this.localTerm.set(this.searchTerm()));
   }
 
   handleInputChange(value: string) {

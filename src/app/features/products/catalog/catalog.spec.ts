@@ -1,5 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import { provideRouter } from '@angular/router';
+import { provideRouter, Router } from '@angular/router';
 import { of, throwError } from 'rxjs';
 import { AuthService } from '../../../core/auth.service';
 import { Product } from '../../../core/models/product.model';
@@ -46,6 +46,8 @@ function setup(getPage: ProductService['getPage']) {
       },
     ],
   });
+  const router = TestBed.inject(Router);
+  vi.spyOn(router, 'navigate').mockResolvedValue(true);
   return TestBed.createComponent(Catalog).componentInstance;
 }
 
@@ -88,9 +90,29 @@ describe('Catalog', () => {
     expect(catalog.selectedCategory()).toBe('ropa');
   });
 
-  it('actualiza término de búsqueda al llamar setSearch', () => {
+  it('limpia la búsqueda manteniendo la categoría seleccionada', () => {
     const catalog = setup(() => of({ products: [item(1)], total: 1, skip: 0, limit: 20 }));
-    catalog.setSearch('auriculares');
-    expect(catalog.searchTerm()).toBe('auriculares');
+    const router = TestBed.inject(Router);
+
+    catalog.clearSearch();
+
+    expect(router.navigate).toHaveBeenCalledWith(['/products'], {
+      queryParams: { q: null },
+      queryParamsHandling: 'merge',
+    });
+  });
+
+  it('sincroniza la categoría seleccionada con la URL', () => {
+    const catalog = setup(() => of({ products: [item(1)], total: 1, skip: 0, limit: 20 }));
+    const router = TestBed.inject(Router);
+
+    catalog.setCategory('ropa');
+
+    expect(catalog.selectedCategory()).toBe('ropa');
+    expect(router.navigate).toHaveBeenCalledWith(['/products'], {
+      queryParams: { category: 'ropa' },
+      queryParamsHandling: 'merge',
+      replaceUrl: true,
+    });
   });
 });

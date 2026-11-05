@@ -1,6 +1,8 @@
 import { Component, inject, signal } from '@angular/core';
-import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { ActivatedRoute, Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { TablerIconComponent } from '@tabler/icons-angular';
+import { map } from 'rxjs/operators';
 import { Alert } from './components/atoms/alert/alert';
 import { CartBadge } from './components/atoms/cart-badge/cart-badge';
 import { ConfirmDialog } from './components/molecules/confirm-dialog/confirm-dialog';
@@ -27,7 +29,12 @@ export class App {
   protected readonly cartService = inject(CartService);
   protected readonly auth = inject(AuthService);
   private readonly router = inject(Router);
+  private readonly route = inject(ActivatedRoute);
 
+  protected readonly searchTerm = toSignal(
+    this.route.queryParamMap.pipe(map((params) => params.get('q') ?? '')),
+    { initialValue: '' },
+  );
   protected readonly isLogoutModalOpen = signal(false);
   protected readonly logoutAlert = signal<string | null>(null);
 
@@ -57,6 +64,9 @@ export class App {
   }
 
   onSearch(term: string) {
-    this.router.navigate(['/products'], { queryParams: term ? { q: term } : {} });
+    this.router.navigate(['/products'], {
+      queryParams: { q: term || null },
+      queryParamsHandling: 'merge',
+    });
   }
 }
