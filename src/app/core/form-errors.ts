@@ -12,6 +12,7 @@ export function errorMessage(
   if (errors['minlength']) {
     return `Escribe al menos ${errors['minlength'].requiredLength} caracteres.`;
   }
+  if (errors['mismatch']) return 'Las contraseñas no coinciden.';
   if (errors['pattern']) return patternMessage ?? 'Revisa el formato.';
   if (errors['cardNumber']) return 'Número de tarjeta inválido.';
   if (errors['expiry']) return 'Fecha inválida o vencida (usa MM/AA).';

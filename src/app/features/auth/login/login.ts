@@ -1,11 +1,34 @@
 import { Component, inject, signal } from '@angular/core';
-import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+  AbstractControl,
+  FormBuilder,
+  ReactiveFormsModule,
+  ValidationErrors,
+  ValidatorFn,
+  Validators,
+} from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { TablerIconComponent } from '@tabler/icons-angular';
 import { Button } from '../../../components/atoms/button/button';
 import { Alert } from '../../../components/atoms/alert/alert';
 import { AuthService } from '../../../core/auth.service';
 import { errorMessage } from '../../../core/form-errors';
+
+export const passwordMatchValidator: ValidatorFn = (
+  control: AbstractControl,
+): ValidationErrors | null => {
+  const password = control.get('password');
+  const confirmPassword = control.get('confirmPassword');
+  if (!password || !confirmPassword) return null;
+  if (confirmPassword.errors && !confirmPassword.errors['mismatch']) return null;
+  if (password.value !== confirmPassword.value) {
+    confirmPassword.setErrors({ mismatch: true });
+    return { mismatch: true };
+  } else {
+    confirmPassword.setErrors(null);
+    return null;
+  }
+};
 
 @Component({
   selector: 'app-login',
@@ -21,30 +44,65 @@ export class Login {
   private readonly fb = inject(FormBuilder);
 
   protected readonly errorMessage = errorMessage;
-  protected readonly loginError = signal<string | null>(null);
+  protected readonly mode = signal<'login' | 'register'>('login');
+  protected readonly authError = signal<string | null>(null);
   protected readonly showPassword = signal(false);
 
-  protected readonly form = this.fb.nonNullable.group({
+  protected readonly loginForm = this.fb.nonNullable.group({
     email: ['', [Validators.required, Validators.email]],
     password: ['', [Validators.required, Validators.minLength(6)]],
   });
+
+  protected readonly registerForm = this.fb.nonNullable.group(
+    {
+      name: ['', [Validators.required, Validators.minLength(2)]],
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', [Validators.required, Validators.minLength(6)]],
+      confirmPassword: ['', [Validators.required]],
+    },
+    { validators: [passwordMatchValidator] },
+  );
+
+  setMode(newMode: 'login' | 'register') {
+    this.mode.set(newMode);
+    this.authError.set(null);
+  }
 
   togglePasswordVisibility(): void {
     this.showPassword.update((visible) => !visible);
   }
 
-  submit() {
-    if (this.form.invalid) {
-      this.form.markAllAsTouched();
+  submitLogin() {
+    if (this.loginForm.invalid) {
+      this.loginForm.markAllAsTouched();
       return;
     }
 
-    const { email, password } = this.form.getRawValue();
+    const { email, password } = this.loginForm.getRawValue();
     if (this.auth.login(email, password)) {
-      const returnUrl = this.route.snapshot.queryParamMap.get('returnUrl');
-      this.router.navigateByUrl(returnUrl?.startsWith('/') ? returnUrl : '/products');
+      this.redirectAfterAuth();
     } else {
-      this.loginError.set('Correo o contraseña incorrectos.');
+      this.authError.set('Correo o contraseña incorrectos.');
     }
+  }
+
+  submitRegister() {
+    if (this.registerForm.invalid) {
+      this.registerForm.markAllAsTouched();
+      return;
+    }
+
+    const { name, email, password } = this.registerForm.getRawValue();
+    const result = this.auth.register(name, email, password);
+    if (result.success) {
+      this.redirectAfterAuth();
+    } else {
+      this.authError.set(result.error ?? 'Ocurrió un error al registrar la cuenta.');
+    }
+  }
+
+  private redirectAfterAuth() {
+    const returnUrl = this.route.snapshot.queryParamMap.get('returnUrl');
+    this.router.navigateByUrl(returnUrl?.startsWith('/') ? returnUrl : '/products');
   }
 }

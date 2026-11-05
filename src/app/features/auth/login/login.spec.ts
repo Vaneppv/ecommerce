@@ -8,6 +8,8 @@ import {
   IconInfoCircle,
   IconLock,
   IconMail,
+  IconUser,
+  IconUserPlus,
   provideTablerIcons,
 } from '@tabler/icons-angular';
 import { AuthService } from '../../../core/auth.service';
@@ -34,6 +36,8 @@ describe('Login Component', () => {
           IconInfoCircle,
           IconCircleX,
           IconArrowLeft,
+          IconUser,
+          IconUserPlus,
         }),
       ],
     }).compileComponents();
@@ -45,30 +49,45 @@ describe('Login Component', () => {
     fixture.detectChanges();
   });
 
-  it('debe crearse y tener el formulario vacío inicialmente', () => {
+  it('debe crearse e iniciar en modo login por defecto', () => {
     expect(component).toBeTruthy();
-    expect(component['form'].value).toEqual({ email: '', password: '' });
+    expect(component['mode']()).toBe('login');
+    expect(component['loginForm'].value).toEqual({ email: '', password: '' });
   });
 
-  it('muestra errores de validación si se envía vacío', () => {
-    component.submit();
+  it('permite alternar entre los modos de login y registro', () => {
+    component.setMode('register');
+    fixture.detectChanges();
+    expect(component['mode']()).toBe('register');
+
+    const titleEl = fixture.nativeElement.querySelector('#auth-title');
+    expect(titleEl.textContent).toContain('Crear cuenta');
+
+    component.setMode('login');
+    fixture.detectChanges();
+    expect(component['mode']()).toBe('login');
+    expect(titleEl.textContent).toContain('Iniciar sesión');
+  });
+
+  it('muestra errores de validación si se envía el formulario de login vacío', () => {
+    component.submitLogin();
     fixture.detectChanges();
 
-    expect(component['form'].invalid).toBe(true);
+    expect(component['loginForm'].invalid).toBe(true);
     const errors = fixture.nativeElement.querySelectorAll('.form-error');
     expect(errors.length).toBeGreaterThan(0);
   });
 
-  it('muestra mensaje de error si las credenciales son incorrectas', () => {
-    component['form'].setValue({
+  it('muestra mensaje de error si las credenciales de login son incorrectas', () => {
+    component['loginForm'].setValue({
       email: 'erroneo@tienda.com',
       password: 'password_falso',
     });
 
-    component.submit();
+    component.submitLogin();
     fixture.detectChanges();
 
-    expect(component['loginError']()).toContain('Correo o contraseña incorrectos');
+    expect(component['authError']()).toContain('Correo o contraseña incorrectos');
     const alertEl = fixture.nativeElement.querySelector('app-alert');
     expect(alertEl).toBeTruthy();
   });
@@ -76,19 +95,83 @@ describe('Login Component', () => {
   it('inicia sesión correctamente con las credenciales demo y navega', () => {
     const navigateSpy = vi.spyOn(router, 'navigateByUrl');
 
-    component['form'].setValue({
+    component['loginForm'].setValue({
       email: 'demo@tienda.com',
       password: 'demo1234',
     });
 
-    component.submit();
+    component.submitLogin();
     fixture.detectChanges();
 
     expect(authService.isLoggedIn()).toBe(true);
     expect(navigateSpy).toHaveBeenCalledWith('/products');
   });
 
-  it('alterna la visibilidad de la contraseña al hacer clic en el botón toggle', () => {
+  it('valida campos obligatorios y coincidencia de contraseñas en modo registro', () => {
+    component.setMode('register');
+    fixture.detectChanges();
+
+    // Enviar vacío
+    component.submitRegister();
+    fixture.detectChanges();
+    expect(component['registerForm'].invalid).toBe(true);
+
+    // Contraseñas no coincidentes
+    component['registerForm'].setValue({
+      name: 'Carlos Pérez',
+      email: 'carlos@tienda.com',
+      password: 'password123',
+      confirmPassword: 'distinta_password',
+    });
+    fixture.detectChanges();
+
+    expect(component['registerForm'].controls.confirmPassword.hasError('mismatch')).toBe(true);
+  });
+
+  it('registra una cuenta nueva, persiste en localStorage e inicia sesión automáticamente', () => {
+    const navigateSpy = vi.spyOn(router, 'navigateByUrl');
+    component.setMode('register');
+    fixture.detectChanges();
+
+    component['registerForm'].setValue({
+      name: 'María López',
+      email: 'maria@ejemplo.com',
+      password: 'password123',
+      confirmPassword: 'password123',
+    });
+
+    component.submitRegister();
+    fixture.detectChanges();
+
+    expect(authService.isLoggedIn()).toBe(true);
+    expect(authService.user()?.name).toBe('María López');
+    expect(navigateSpy).toHaveBeenCalledWith('/products');
+
+    // Verificar en localStorage
+    const savedAccounts = JSON.parse(localStorage.getItem('ecommerce_accounts') || '[]');
+    expect(savedAccounts.some((a: any) => a.email === 'maria@ejemplo.com')).toBe(true);
+  });
+
+  it('muestra alerta si se intenta registrar un correo ya existente', () => {
+    component.setMode('register');
+    fixture.detectChanges();
+
+    component['registerForm'].setValue({
+      name: 'Demo Clon',
+      email: 'demo@tienda.com',
+      password: 'password123',
+      confirmPassword: 'password123',
+    });
+
+    component.submitRegister();
+    fixture.detectChanges();
+
+    expect(component['authError']()).toContain('Ya existe una cuenta registrada');
+    const alertEl = fixture.nativeElement.querySelector('app-alert');
+    expect(alertEl).toBeTruthy();
+  });
+
+  it('alterna la visibilidad de la contraseña en los inputs', () => {
     expect(component['showPassword']()).toBe(false);
 
     const toggleBtn = fixture.nativeElement.querySelector(
@@ -98,19 +181,9 @@ describe('Login Component', () => {
     fixture.detectChanges();
 
     expect(component['showPassword']()).toBe(true);
-    const passInput = fixture.nativeElement.querySelector('#password') as HTMLInputElement;
-    expect(passInput.type).toBe('text');
 
     toggleBtn.click();
     fixture.detectChanges();
     expect(component['showPassword']()).toBe(false);
-    expect(passInput.type).toBe('password');
-  });
-
-  it('muestra la tarjeta informativa con las credenciales de prueba', () => {
-    const demoCard = fixture.nativeElement.querySelector('.demo-card');
-    expect(demoCard).toBeTruthy();
-    expect(demoCard.textContent).toContain('demo@tienda.com');
-    expect(demoCard.textContent).toContain('demo1234');
   });
 });

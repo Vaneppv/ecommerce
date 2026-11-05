@@ -21,6 +21,8 @@ import {
   IconShoppingBag,
   IconShoppingCart,
   IconTrash,
+  IconUser,
+  IconUserPlus,
   IconX,
   provideTablerIcons,
 } from '@tabler/icons-angular';
@@ -51,6 +53,8 @@ export const appConfig: ApplicationConfig = {
       IconShoppingBag,
       IconShoppingCart,
       IconTrash,
+      IconUser,
+      IconUserPlus,
       IconX,
     }),
   ],

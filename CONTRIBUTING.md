@@ -227,6 +227,17 @@ La validación de stock se hace en la UI del detalle y del carrito. Si se
 centraliza en el servicio, hay que actualizar los tests y revisar los componentes
 que ya limitan la cantidad.
 
+#### `AuthService`
+
+Archivo: `src/app/core/auth.service.ts`.
+
+- `user`: signal con el usuario activo o `null`.
+- `isLoggedIn`: `computed` que verifica si `user() !== null`.
+- `getAccounts()`: devuelve la lista combinada de cuentas predeterminadas (`demo@tienda.com`) y las cuentas registradas en `localStorage` con la clave `ecommerce_accounts`.
+- `register(name, email, password)`: valida unicidad de correo, persiste la nueva cuenta en `localStorage` e inicia sesión automáticamente.
+- `login(email, password)`: valida credenciales contra las cuentas disponibles y persiste la sesión activa en `localStorage` con la clave `ecommerce_user`.
+- `logout()`: limpia la sesión activa en memoria y en `localStorage`, preservando las cuentas registradas.
+
 ### 4.8 Estado y reactividad
 
 - Usa `signal()` para estado local mutable y `computed()` para valores derivados.
