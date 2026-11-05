@@ -30,6 +30,12 @@
   border-bottom: 1px solid #c9964a;
 }
 
+.brand-logo {
+  width: 2.5rem;
+  height: 2.5rem;
+  object-fit: cover;
+}
+
 .brand {
   flex-shrink: 0;
   color: #fdf6e3;
@@ -67,29 +73,44 @@
   padding: 0 var(--page-gutter);
 }
 
-.user-name {
-  font-size: 0.9rem;
-}
-
-.topbar-link {
-  padding: 0.25rem 0.5rem;
-  border: 0;
-  background: none;
+.topbar-user {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
   color: #fdf6e3;
   font-size: 0.9rem;
-  text-decoration: underline;
-  text-underline-offset: 0.2em;
+  white-space: nowrap;
+}
+
+.topbar-action {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.4rem 0.75rem;
+  border: 1px solid rgba(253, 246, 227, 0.35);
+  border-radius: 9999px;
+  background: transparent;
+  color: #fdf6e3;
+  font: inherit;
+  font-size: 0.9rem;
+  font-weight: 500;
+  line-height: 1;
+  white-space: nowrap;
+  text-decoration: none;
   cursor: pointer;
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease;
 }
 
-.topbar-link:hover {
-  opacity: 0.85;
+.topbar-action:hover {
+  border-color: #d2b48c;
+  background: rgba(253, 246, 227, 0.12);
 }
 
-.topbar-link:focus-visible {
-  border-radius: 2px;
+.topbar-action:focus-visible {
   outline: 2px solid #d2b48c;
-  outline-offset: 3px;
+  outline-offset: 2px;
 }
 
 .main-nav {
@@ -165,7 +186,12 @@ main:focus {
   }
 }
 
-@media (max-width: 480px) {
+@media (max-width: 600px) {
+  .topbar-action {
+    padding: 0.4rem;
+  }
+
+  .topbar-action-label,
   .user-name {
     display: none;
   }

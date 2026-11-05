@@ -30,4 +30,16 @@ describe('CartBadge Atom', () => {
     const link = fixture.nativeElement.querySelector('a');
     expect(link.getAttribute('href')).toBe('/cart');
   });
+
+  it('muestra la etiqueta Carrito y un aria-label con el conteo', () => {
+    fixture.componentRef.setInput('label', 'Carrito');
+    fixture.componentRef.setInput('count', 3);
+    fixture.detectChanges();
+
+    const link = fixture.nativeElement.querySelector('a');
+    const label = fixture.nativeElement.querySelector('.badge-label');
+
+    expect(label.textContent.trim()).toBe('Carrito');
+    expect(link.getAttribute('aria-label')).toBe('Ver carrito de compras, 3 productos');
+  });
 });

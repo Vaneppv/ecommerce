@@ -5,11 +5,12 @@ import { Product } from '../../core/models/product.model';
 import { ProductService } from '../../core/product-service';
 import { CartAccessService } from '../../core/cart-access.service';
 import { ProductCard } from '../../components/molecules/product-card/product-card';
+import { ProductCardSkeleton } from '../../components/molecules/product-card-skeleton/product-card-skeleton';
 import { CategoryCard } from '../../components/molecules/category-card/category-card';
 
 @Component({
   selector: 'app-home',
-  imports: [RouterLink, TablerIconComponent, ProductCard, CategoryCard],
+  imports: [RouterLink, TablerIconComponent, ProductCard, ProductCardSkeleton, CategoryCard],
   templateUrl: './home.html',
   styleUrl: './home.css',
 })

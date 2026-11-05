@@ -1,16 +1,15 @@
 import { Component, computed, inject, signal } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { finalize, Subscription } from 'rxjs';
 import { ProductGrid } from '../../../components/organisms/product-grid/product-grid';
 import { Product } from '../../../core/models/product.model';
 import { ProductService } from '../../../core/product-service';
 import { CartAccessService } from '../../../core/cart-access.service';
 import { CategoryFilter } from '../../../components/molecules/category-filter/category-filter';
-import { SearchForm } from '../../../components/molecules/search-form/search-form';
 
 @Component({
   selector: 'app-catalog',
-  imports: [ProductGrid, CategoryFilter, SearchForm],
+  imports: [ProductGrid, CategoryFilter],
   templateUrl: './catalog.html',
   styleUrl: './catalog.css',
 })
@@ -18,6 +17,7 @@ export class Catalog {
   private readonly productService = inject(ProductService);
   private readonly cartAccess = inject(CartAccessService);
   private readonly route = inject(ActivatedRoute, { optional: true });
+  private readonly router = inject(Router);
   private readonly pageSize = 20;
   private noticeTimer?: ReturnType<typeof setTimeout>;
   private request?: Subscription;
@@ -44,7 +44,7 @@ export class Catalog {
         if (
           search === this.searchTerm() &&
           category === this.selectedCategory() &&
-          this.products().length > 0
+          (this.products().length > 0 || this.loading())
         ) {
           return;
         }
@@ -87,16 +87,26 @@ export class Catalog {
       });
   }
 
-  setSearch(term: string) {
-    this.searchTerm.set(term);
-    this.resetList();
-    this.loadMore();
+  clearSearch() {
+    this.router.navigate(['/products'], {
+      queryParams: { q: null },
+      queryParamsHandling: 'merge',
+    });
   }
 
   setCategory(category: string) {
-    this.selectedCategory.set(category || 'todas');
+    const next = category || 'todas';
+    if (next === this.selectedCategory()) return;
+
+    this.selectedCategory.set(next);
     this.resetList();
     this.loadMore();
+
+    this.router.navigate(['/products'], {
+      queryParams: { category: next },
+      queryParamsHandling: 'merge',
+      replaceUrl: true,
+    });
   }
 
   clearCategory() {

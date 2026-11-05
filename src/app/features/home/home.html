@@ -20,7 +20,9 @@
   @if (loadingPopular()) {
     <ul class="popular-grid" aria-hidden="true">
       @for (placeholder of [1, 2, 3, 4, 5, 6]; track placeholder) {
-        <li class="skeleton-card"></li>
+        <li>
+          <app-product-card-skeleton />
+        </li>
       }
     </ul>
   } @else if (error(); as message) {

@@ -8,12 +8,15 @@
   <p class="notice" role="status">{{ text }}</p>
 }
 
-<section class="catalog-controls" aria-label="Buscar y filtrar productos">
-  <app-search-form
-    [searchTerm]="searchTerm()"
-    placeholder="Buscar por nombre o descripción..."
-    (onSearch)="setSearch($event)"
-  />
+<section class="catalog-controls" aria-label="Filtrar productos">
+  @if (searchTerm()) {
+    <p class="active-search" role="status">
+      Resultados para <strong>“{{ searchTerm() }}”</strong>
+      <button type="button" class="clear-search" (click)="clearSearch()">
+        Limpiar búsqueda
+      </button>
+    </p>
+  }
 
   <div class="category-heading">
     <span>Categorías</span>
