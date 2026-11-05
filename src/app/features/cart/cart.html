@@ -1,0 +1,178 @@
+<div class="cart-container">
+  <div class="cart-header">
+    <div class="header-titles">
+      <h1 class="page-title">Tu Carrito de Compras</h1>
+      @if (cartService.totalCount() > 0) {
+        <span class="items-count"
+          >({{ cartService.totalCount() }}
+          {{ cartService.totalCount() === 1 ? 'producto' : 'productos' }})</span
+        >
+      }
+    </div>
+    <a routerLink="/products" class="back-link">
+      <tabler-icon icon="arrow-left" [size]="16" />
+      <span>Continuar comprando</span>
+    </a>
+  </div>
+
+  @if (cartService.items().length === 0) {
+    <div class="empty-cart-card">
+      <div class="empty-icon-wrapper">
+        <tabler-icon icon="shopping-bag" [size]="52" />
+      </div>
+      <h2>Tu carrito está vacío</h2>
+      <p class="empty-description">
+        Aún no has agregado ningún producto a tu carrito. Explora nuestra tienda y descubre
+        artículos exclusivos.
+      </p>
+      <a routerLink="/products" class="btn-shop">
+        <tabler-icon icon="shopping-cart" [size]="18" />
+        <span>Explorar catálogo</span>
+      </a>
+    </div>
+  } @else {
+    <div class="cart-layout">
+      <!-- Items Section -->
+      <section class="cart-items-section" aria-label="Productos en el carrito">
+        <div class="items-list">
+          @for (item of cartService.items(); track item.product.id) {
+            <article class="cart-item-card">
+              <a [routerLink]="['/products', item.product.id]" class="item-thumbnail-link">
+                <app-image
+                  [src]="item.product.thumbnail"
+                  [alt]="item.product.title"
+                  [loading]="false"
+                />
+              </a>
+
+              <div class="item-info">
+                <span class="item-category">{{ item.product.category | titlecase }}</span>
+                <a [routerLink]="['/products', item.product.id]" class="item-title-link">
+                  <h2 class="item-title">{{ item.product.title }}</h2>
+                </a>
+                <span class="unit-price">Precio unitario: {{ item.product.price | currency }}</span>
+              </div>
+
+              <div class="item-controls">
+                <div class="quantity-picker" role="group" aria-label="Modificar cantidad">
+                  <button
+                    type="button"
+                    class="qty-btn"
+                    (click)="onDecrement(item.product.id, item.quantity)"
+                    [attr.aria-label]="
+                      item.quantity === 1
+                        ? 'Eliminar ' + item.product.title
+                        : 'Disminuir cantidad de ' + item.product.title
+                    "
+                    [title]="item.quantity === 1 ? 'Eliminar del carrito' : 'Disminuir cantidad'"
+                  >
+                    @if (item.quantity === 1) {
+                      <tabler-icon icon="trash" [size]="14" />
+                    } @else {
+                      <tabler-icon icon="minus" [size]="14" />
+                    }
+                  </button>
+                  <span class="qty-value" [attr.aria-label]="'Cantidad: ' + item.quantity">{{
+                    item.quantity
+                  }}</span>
+                  <button
+                    type="button"
+                    class="qty-btn"
+                    (click)="onIncrement(item.product.id, item.quantity, item.product.stock)"
+                    [disabled]="
+                      item.product.stock !== undefined && item.quantity >= item.product.stock
+                    "
+                    [attr.aria-label]="'Aumentar cantidad de ' + item.product.title"
+                    title="Aumentar cantidad"
+                  >
+                    <tabler-icon icon="plus" [size]="14" />
+                  </button>
+                </div>
+
+                <div class="item-price-column">
+                  <span class="item-total-price">{{
+                    item.product.price * item.quantity | currency
+                  }}</span>
+                </div>
+
+                <button
+                  type="button"
+                  class="btn-remove-item"
+                  (click)="onRemove(item.product.id)"
+                  [attr.aria-label]="'Quitar ' + item.product.title + ' del carrito'"
+                  title="Eliminar producto"
+                >
+                  <tabler-icon icon="trash" [size]="18" />
+                </button>
+              </div>
+            </article>
+          }
+        </div>
+
+        <div class="cart-items-actions">
+          <button type="button" class="btn-clear-cart" (click)="onClear()">
+            <tabler-icon icon="trash" [size]="16" />
+            <span>Vaciar carrito</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- Order Summary Aside -->
+      <aside class="cart-summary-section" aria-label="Resumen de la compra">
+        <div class="summary-card">
+          <h2 class="summary-title">Resumen del pedido</h2>
+
+          <div class="summary-row">
+            <span class="row-label">Subtotal</span>
+            <span class="row-value">{{ cartService.subtotal() | currency }}</span>
+          </div>
+
+          <div class="summary-row">
+            <span class="row-label">Envío estimado</span>
+            <span class="row-value">
+              @if (cartService.shipping() === 0) {
+                <span class="free-shipping-tag">Gratis</span>
+              } @else {
+                {{ cartService.shipping() | currency }}
+              }
+            </span>
+          </div>
+
+          @if (cartService.subtotal() < 50) {
+            <div class="shipping-hint">
+              <span
+                >Agrega <strong>{{ 50 - cartService.subtotal() | currency }}</strong> más para
+                obtener <strong>Envío Gratis</strong>.</span
+              >
+            </div>
+          } @else {
+            <div class="shipping-hint free-qualified">
+              <span>🎉 ¡Calificas para <strong>Envío Gratis</strong>!</span>
+            </div>
+          }
+
+          <div class="summary-divider"></div>
+
+          <div class="summary-row total-row">
+            <span class="row-label">Total</span>
+            <span class="row-value total-amount">{{ cartService.total() | currency }}</span>
+          </div>
+
+          <div class="checkout-actions">
+            <app-button
+              variant="primary"
+              size="large"
+              class="btn-checkout"
+              (onClick)="onCheckout()"
+            >
+              <span>Proceder al pago</span>
+              <tabler-icon icon="arrow-right" [size]="18" />
+            </app-button>
+          </div>
+
+          <p class="summary-guarantee">🔒 Compra protegida y pago seguro simulado</p>
+        </div>
+      </aside>
+    </div>
+  }
+</div>
