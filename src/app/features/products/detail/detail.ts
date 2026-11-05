@@ -4,7 +4,7 @@ import { CurrencyPipe, TitleCasePipe } from '@angular/common';
 import { TablerIconComponent } from '@tabler/icons-angular';
 import { Product } from '../../../core/models/product.model';
 import { ProductService } from '../../../core/product-service';
-import { CartService } from '../../../core/cart.service';
+import { CartAccessService } from '../../../core/cart-access.service';
 import { Button } from '../../../components/atoms/button/button';
 import { Image } from '../../../components/atoms/image/image';
 
@@ -17,7 +17,7 @@ import { Image } from '../../../components/atoms/image/image';
 export class ProductDetail {
   private readonly route = inject(ActivatedRoute);
   private readonly productService = inject(ProductService);
-  private readonly cartService = inject(CartService);
+  private readonly cartAccess = inject(CartAccessService);
 
   readonly product = signal<Product | null>(null);
   readonly loading = signal(true);
@@ -77,7 +77,8 @@ export class ProductDetail {
     const p = this.product();
     if (!p) return;
 
-    this.cartService.addItem(p, this.quantity());
+    if (!this.cartAccess.add(p, this.quantity())) return;
+
     this.notice.set(`Agregaste ${this.quantity()} unidad(es) de "${p.title}" al carrito`);
     clearTimeout(this.noticeTimer);
     this.noticeTimer = setTimeout(() => this.notice.set(null), 3500);

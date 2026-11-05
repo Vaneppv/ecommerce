@@ -67,6 +67,18 @@
       </div>
     }
 
+    <!-- Aviso: el carrito requiere una sesión activa -->
+    @if (cartNotice()) {
+      <div class="error-banner-wrapper">
+        <app-alert
+          type="info"
+          message="Inicia sesión para usar el carrito de compras."
+          [closable]="true"
+          (onClose)="cartNotice.set(false)"
+        />
+      </div>
+    }
+
     <!-- Alerta de error -->
     @if (authError(); as message) {
       <div class="error-banner-wrapper">

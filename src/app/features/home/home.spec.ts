@@ -1,5 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import { provideRouter } from '@angular/router';
+import { Router, provideRouter } from '@angular/router';
 import {
   IconCategory,
   IconChevronLeft,
@@ -7,6 +7,8 @@ import {
   provideTablerIcons,
 } from '@tabler/icons-angular';
 import { of } from 'rxjs';
+import { AuthService } from '../../core/auth.service';
+import { CartService } from '../../core/cart.service';
 import { Product } from '../../core/models/product.model';
 import { ProductService } from '../../core/product-service';
 import { Home } from './home';
@@ -38,6 +40,7 @@ const product: Product = {
 
 describe('Home', () => {
   beforeEach(() => {
+    localStorage.clear();
     TestBed.configureTestingModule({
       imports: [Home],
       providers: [
@@ -65,5 +68,31 @@ describe('Home', () => {
   it('formatea los nombres de categoría', () => {
     const home = TestBed.createComponent(Home).componentInstance;
     expect(home.formatCategory('home-decoration')).toBe('home decoration');
+  });
+
+  it('agrega el producto al carrito cuando hay sesión iniciada', () => {
+    const auth = TestBed.inject(AuthService);
+    const cart = TestBed.inject(CartService);
+    auth.login('demo@tienda.com', 'demo1234');
+    cart.clearCart();
+
+    const home = TestBed.createComponent(Home).componentInstance;
+    home.addToCart(product);
+
+    expect(home.notice()).toContain('Producto');
+    expect(cart.totalCount()).toBe(1);
+    expect(cart.items()[0].product.id).toBe(product.id);
+  });
+
+  it('no agrega ni muestra aviso cuando no hay sesión iniciada', () => {
+    const cart = TestBed.inject(CartService);
+    const router = TestBed.inject(Router);
+    vi.spyOn(router, 'navigate').mockResolvedValue(true);
+
+    const home = TestBed.createComponent(Home).componentInstance;
+    home.addToCart(product);
+
+    expect(home.notice()).toBeNull();
+    expect(cart.items()).toEqual([]);
   });
 });

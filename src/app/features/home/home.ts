@@ -3,6 +3,7 @@ import { RouterLink } from '@angular/router';
 import { TablerIconComponent } from '@tabler/icons-angular';
 import { Product } from '../../core/models/product.model';
 import { ProductService } from '../../core/product-service';
+import { CartAccessService } from '../../core/cart-access.service';
 import { ProductCard } from '../../components/molecules/product-card/product-card';
 import { CategoryCard } from '../../components/molecules/category-card/category-card';
 
@@ -14,6 +15,7 @@ import { CategoryCard } from '../../components/molecules/category-card/category-
 })
 export class Home {
   private readonly productService = inject(ProductService);
+  private readonly cartAccess = inject(CartAccessService);
   private readonly categoryTrack = viewChild<ElementRef<HTMLElement>>('categoryTrack');
   private noticeTimer?: ReturnType<typeof setTimeout>;
 
@@ -66,6 +68,8 @@ export class Home {
   }
 
   addToCart(product: Product) {
+    if (!this.cartAccess.add(product)) return;
+
     this.notice.set(`"${product.title}" agregado al carrito`);
     clearTimeout(this.noticeTimer);
     this.noticeTimer = setTimeout(() => this.notice.set(null), 3000);

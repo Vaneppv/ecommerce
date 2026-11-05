@@ -47,6 +47,9 @@ export class Login {
   protected readonly mode = signal<'login' | 'register'>('login');
   protected readonly authError = signal<string | null>(null);
   protected readonly showPassword = signal(false);
+  protected readonly cartNotice = signal(
+    this.route.snapshot.queryParamMap.get('reason') === 'cart',
+  );
 
   protected readonly loginForm = this.fb.nonNullable.group({
     email: ['', [Validators.required, Validators.email]],

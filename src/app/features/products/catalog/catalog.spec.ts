@@ -1,6 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
 import { of, throwError } from 'rxjs';
+import { AuthService } from '../../../core/auth.service';
 import { Product } from '../../../core/models/product.model';
 import { ProductService } from '../../../core/product-service';
 import { CartService } from '../../../core/cart.service';
@@ -70,7 +71,9 @@ describe('Catalog', () => {
 
   it('muestra un aviso y agrega el producto al CartService al agregar al carrito', () => {
     const catalog = setup(() => of({ products: [item(1)], total: 1, skip: 0, limit: 20 }));
+    const auth = TestBed.inject(AuthService);
     const cartService = TestBed.inject(CartService);
+    auth.login('demo@tienda.com', 'demo1234');
     cartService.clearCart();
 
     catalog.addToCart(item(1));

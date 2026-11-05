@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { provideRouter, Router } from '@angular/router';
+import { ActivatedRoute, convertToParamMap, provideRouter, Router } from '@angular/router';
 import {
   IconArrowLeft,
   IconCircleX,
@@ -185,5 +185,43 @@ describe('Login Component', () => {
     toggleBtn.click();
     fixture.detectChanges();
     expect(component['showPassword']()).toBe(false);
+  });
+});
+
+describe('Login Component - aviso de carrito', () => {
+  it('muestra un aviso cuando llega con reason=cart', async () => {
+    localStorage.clear();
+
+    await TestBed.configureTestingModule({
+      imports: [Login],
+      providers: [
+        provideRouter([]),
+        {
+          provide: ActivatedRoute,
+          useValue: {
+            snapshot: {
+              queryParamMap: convertToParamMap({ reason: 'cart', returnUrl: '/products' }),
+            },
+          },
+        },
+        provideTablerIcons({
+          IconLock,
+          IconMail,
+          IconEye,
+          IconEyeOff,
+          IconInfoCircle,
+          IconArrowLeft,
+          IconUser,
+          IconUserPlus,
+        }),
+      ],
+    }).compileComponents();
+
+    const fixture = TestBed.createComponent(Login);
+    fixture.detectChanges();
+
+    const alertEl = fixture.nativeElement.querySelector('app-alert');
+    expect(alertEl).toBeTruthy();
+    expect(alertEl.textContent).toContain('Inicia sesión para usar el carrito de compras');
   });
 });

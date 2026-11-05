@@ -2,6 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute, provideRouter } from '@angular/router';
 import { of, throwError } from 'rxjs';
 import { IconArrowLeft, IconShoppingCart, provideTablerIcons } from '@tabler/icons-angular';
+import { AuthService } from '../../../core/auth.service';
 import { Product } from '../../../core/models/product.model';
 import { ProductService } from '../../../core/product-service';
 import { CartService } from '../../../core/cart.service';
@@ -85,7 +86,9 @@ describe('ProductDetail', () => {
   });
 
   it('muestra aviso, agrega el producto y muestra feedback en el botón', () => {
+    const auth = TestBed.inject(AuthService);
     const cartService = TestBed.inject(CartService);
+    auth.login('demo@tienda.com', 'demo1234');
     cartService.clearCart();
 
     component.incrementQuantity();

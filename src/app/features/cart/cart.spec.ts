@@ -11,6 +11,7 @@ import {
   provideTablerIcons,
 } from '@tabler/icons-angular';
 import { Cart } from './cart';
+import { AuthService } from '../../core/auth.service';
 import { CartService } from '../../core/cart.service';
 import { Product } from '../../core/models/product.model';
 
@@ -67,6 +68,8 @@ describe('Cart Component', () => {
       ],
     }).compileComponents();
 
+    const authService = TestBed.inject(AuthService);
+    authService.login('demo@tienda.com', 'demo1234');
     cartService = TestBed.inject(CartService);
     cartService.clearCart();
 

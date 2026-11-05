@@ -77,6 +77,9 @@ describe('App', () => {
   });
 
   it('debe reflejar la cantidad de productos del carrito en el header badge', () => {
+    authService.login('demo@tienda.com', 'demo1234');
+    cartService.clearCart();
+
     const fixture = TestBed.createComponent(App);
     fixture.detectChanges();
 
