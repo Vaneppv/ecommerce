@@ -29,6 +29,10 @@ export const routes: Routes = [
     loadComponent: () => import('./features/not-found/not-found').then((m) => m.NotFound),
   },
   {
+    path: 'checkout',
+    loadComponent: () => import('./features/checkout/checkout').then((m) => m.Checkout),
+  },
+  {
     path: '**',
     loadComponent: () => import('./features/not-found/not-found').then((m) => m.NotFound),
   },

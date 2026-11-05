@@ -3,8 +3,19 @@ import { TestBed } from '@angular/core/testing';
 import { Router, RouterOutlet, provideRouter } from '@angular/router';
 import {
   IconArrowLeft,
+  IconBuilding,
+  IconCalendar,
+  IconCircleCheck,
+  IconCreditCard,
   IconError404,
+  IconLayoutGrid,
+  IconLock,
+  IconMail,
+  IconMapPin,
+  IconPhone,
+  IconShoppingBag,
   IconShoppingCart,
+  IconUser,
   provideTablerIcons,
 } from '@tabler/icons-angular';
 import { routes } from './app.routes';
@@ -26,7 +37,22 @@ describe('App Routes - 404 Navigation', () => {
       imports: [TestHostComponent],
       providers: [
         provideRouter(routes),
-        provideTablerIcons({ IconError404, IconArrowLeft, IconShoppingCart }),
+        provideTablerIcons({
+          IconError404,
+          IconArrowLeft,
+          IconShoppingCart,
+          IconBuilding,
+          IconCalendar,
+          IconCircleCheck,
+          IconCreditCard,
+          IconLayoutGrid,
+          IconLock,
+          IconMail,
+          IconMapPin,
+          IconPhone,
+          IconShoppingBag,
+          IconUser,
+        }),
       ],
     }).compileComponents();
 
@@ -68,5 +94,14 @@ describe('App Routes - 404 Navigation', () => {
     fixture.detectChanges();
     const notFoundEl = (fixture.nativeElement as HTMLElement).querySelector('app-not-found');
     expect(notFoundEl).toBeTruthy();
+  });
+
+  it('navega a checkout en lugar de resolverlo con la ruta comodín', async () => {
+    const fixture = TestBed.createComponent(TestHostComponent);
+    fixture.detectChanges();
+
+    await router.navigate(['/checkout']);
+
+    expect(router.routerState.snapshot.root.firstChild?.routeConfig?.path).toBe('checkout');
   });
 });
